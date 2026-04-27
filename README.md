@@ -7,52 +7,74 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+# Website Lowongan Kerja Arsitek 
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Latar Belakang
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Proses rekrutmen arsitek lepas (freelance) saat ini masih terhambat oleh ketidakefisienan dan kurangnya transparansi akibat absennya wadah digital yang terspesialisasi. Arsitek (terutama fresh graduate) sulit membangun rekam jejak, sementara klien kesulitan menemukan talenta yang sesuai dengan gaya desain dan kualifikasi proyek mereka.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Untuk mengatasi kesenjangan tersebut, diperlukan sebuah platform digital terintegrasi yang mampu:
+- Menghubungkan secara Langsung: Mempertemukan klien dan arsitek dalam satu ekosistem contract-based hiring.
+- Standarisasi Portofolio: Menyediakan fitur validasi portofolio digital untuk mempermudah proses matching berdasarkan kualitas dan gaya desain.
+- Transparansi Kerja: Menerapkan mekanisme pengajuan proposal yang terbuka serta sistem manajemen status proyek yang terstruktur.
+- Profesionalisme: Membantu arsitek membangun profil profesional sekaligus menjamin alur kerja yang efektif bagi pemberi kerja.
 
-## Learning Laravel
+## Pengguna
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Admin
+- Arsitek
+- Client
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Lingkup Sistem
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+- Management Akun & Role
+- Lowongan Kerja Berbasis Proyek
+- Sistem Proposal (Lamaran Kerja Proyek)
+- Profil dan Portofolio Digital
+- Sistem Status Proyek
+- Rating dan Review
 
-## Agentic Development
+## Teknologi Pemrograman
+- Laravel
+- Filament
+- MySQL
+- Git & Github
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Instalasi
 
+1. Install Dependency Laravel
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer install
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+2. Copy File Environment
+```bash
+cp .env.example .env
+```
 
-## Contributing
+3. Generate App Key
+```bash
+php artisan key:generate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4. Setup Database "db_pbl_arsitek"
 
-## Code of Conduct
+5. Migrasi Database
+```bash
+php artisan migrate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+6. Install Dependency Frontend
+```bash
+npm install
+```
 
-## Security Vulnerabilities
+7. Jalankan Vite (Frontend)
+```bash
+npm run dev
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+8. Jalankan Server Laravel
+```bash
+php artisan serve
+```
