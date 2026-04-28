@@ -78,3 +78,59 @@ npm run dev
 ```bash
 php artisan serve
 ```
+
+## Update
+1. 🔐 Authentication & Authorization
+Aplikasi ini sudah mengimplementasikan sistem autentikasi menggunakan:
+- Laravel Breeze
+
+Fitur:
+- Registrasi user
+- Login & logout
+- Session management
+
+2. 🔒 Proteksi Akses (Middleware)
+Aplikasi menggunakan custom middleware:
+"RoleMiddleware"
+```bash
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    // route admin
+});
+```
+
+3. 🛠 Admin Panel
+Admin panel dibangun menggunakan:
+
+Filament
+Akses:
+```bash
+http://127.0.0.1:8000/admin
+```
+
+4. 🔐 Proteksi Admin Panel
+Hanya user dengan role admin yang dapat mengakses panel:
+```bash
+public function canAccessPanel(\Filament\Panel $panel): bool
+{
+    return $this->role === 'admin';
+}
+```
+
+5. 🌱 Seeder
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| Admin | admin@mail.com | password |
+| Client | client@mail.com | password |
+| Arsitek | arsitek@mail.com | password |
+
+
+## Struktur Sistem Saat Ini
+✔ Backend
+- Laravel (MVC)
+- MySQL Database
+✔ Frontend
+- Blade (Laravel)
+- Vite
+✔ Tools
+- Laragon
+- Git
