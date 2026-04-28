@@ -116,21 +116,15 @@ public function canAccessPanel(\Filament\Panel $panel): bool
 }
 ```
 
-5. 🌱 Seeder
-| Role | Email | Password |
-| :--- | :--- | :--- |
-| Admin | admin@mail.com | password |
-| Client | client@mail.com | password |
-| Arsitek | arsitek@mail.com | password |
-
-
 ## Struktur Sistem Saat Ini
 ✔ Backend
 - Laravel (MVC)
 - MySQL Database
+
 ✔ Frontend
 - Blade (Laravel)
 - Vite
+
 ✔ Tools
 - Laragon
 - Git
