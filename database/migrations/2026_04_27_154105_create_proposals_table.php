@@ -11,9 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('proposals', function (Blueprint $table) {
+        Schema::create('proposal', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('proyek_id')->constrained('proyek')->cascadeOnDelete();
+            $table->foreignId('arsitek_id')->constrained('users')->cascadeOnDelete();
+            $table->decimal('harga_tawaran', 15, 2);
+            $table->integer('estimasi_waktu');
+            $table->text('deskripsi');
+            $table->string('status', 20)->default('pending');
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 
@@ -22,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('proposals');
+        Schema::dropIfExists('proposal');
     }
 };

@@ -17,6 +17,46 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    public function profilArsitek()
+    {
+        return $this->hasOne(ProfilArsitek::class, 'user_id');
+    }
+
+    public function portofolio()
+    {
+        return $this->hasMany(Portofolio::class, 'user_id');
+    }
+
+    public function proyek()
+    {
+        return $this->hasMany(Proyek::class, 'client_id');
+    }
+
+    public function proposal()
+    {
+        return $this->hasMany(Proposal::class, 'arsitek_id');
+    }
+
+    public function verifikasiUser()
+    {
+        return $this->hasOne(VerifikasiUser::class, 'user_id');
+    }
+
+    public function logAktivitasAdmin()
+    {
+        return $this->hasMany(LogAktivitasAdmin::class, 'admin_id');
+    }
+
+    public function ratingSebagaiArsitek()
+    {
+        return $this->hasMany(Rating::class, 'arsitek_id');
+    }
+
+    public function ratingSebagaiClient()
+    {
+        return $this->hasMany(Rating::class, 'client_id');
+    }
+
     /**
      * Get the attributes that should be cast.
      *

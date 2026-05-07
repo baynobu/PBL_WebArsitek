@@ -62,6 +62,7 @@ php artisan key:generate
 5. Migrasi Database
 ```bash
 php artisan migrate
+php artisan db:seed --seed
 ```
 
 6. Install Dependency Frontend

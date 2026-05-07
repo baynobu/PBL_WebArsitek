@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('verifikasi_users', function (Blueprint $table) {
+        Schema::create('verifikasi_user', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->string('status', 20)->default('unverified');
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('verifikasi_users');
+        Schema::dropIfExists('verifikasi_user');
     }
 };

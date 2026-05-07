@@ -11,9 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ratings', function (Blueprint $table) {
+        Schema::create('rating', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('proyek_id')->constrained('proyek')->cascadeOnDelete();
+            $table->foreignId('arsitek_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('client_id')->constrained('users')->cascadeOnDelete();
+            $table->integer('nilai');
+            $table->text('komentar')->nullable();
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 
@@ -22,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ratings');
+        Schema::dropIfExists('rating');
     }
 };
