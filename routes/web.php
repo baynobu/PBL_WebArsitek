@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProyekController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,5 +22,9 @@ Route::middleware('auth')->group(function () {
         });
     });
 });
+
+// Proyek - public listing and detail (Milestone 1)
+Route::get('/proyek', [ProyekController::class, 'index'])->name('proyek.index');
+Route::get('/proyek/{proyek}', [ProyekController::class, 'show'])->name('proyek.show');
 
 require __DIR__ . '/auth.php';
