@@ -7,6 +7,7 @@ use App\Models\Proposal;
 use App\Models\VerifikasiUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProposalController extends Controller
 {
@@ -27,6 +28,11 @@ class ProposalController extends Controller
     public function create(Proyek $proyek)
     {
         $user = Auth::user();
+
+        if ($proyek->status !== 'open') {
+            return redirect()->route('proyek.show', $proyek)->with('error', 'Proposal hanya bisa dikirim saat proyek masih open.');
+        }
+
         if ($user->role !== 'arsitek') {
             return redirect()->route('proyek.show', $proyek)->with('error', 'Hanya arsitek yang dapat mengirim proposal.');
         }
@@ -34,6 +40,14 @@ class ProposalController extends Controller
         $ver = VerifikasiUser::where('user_id', $user->id)->first();
         if (! $ver || $ver->status !== 'verified') {
             return redirect()->route('proyek.show', $proyek)->with('error', 'Akun arsitek belum terverifikasi.');
+        }
+
+        $alreadySubmitted = Proposal::where('proyek_id', $proyek->id)
+            ->where('arsitek_id', $user->id)
+            ->exists();
+
+        if ($alreadySubmitted) {
+            return redirect()->route('proposal.index')->with('error', 'Anda sudah mengirim proposal untuk proyek ini.');
         }
 
         return view('proposal.create', compact('proyek'));
@@ -42,6 +56,11 @@ class ProposalController extends Controller
     public function store(Request $request, Proyek $proyek)
     {
         $user = Auth::user();
+
+        if ($proyek->status !== 'open') {
+            return redirect()->route('proyek.show', $proyek)->with('error', 'Proposal hanya bisa dikirim saat proyek masih open.');
+        }
+
         if ($user->role !== 'arsitek') {
             return redirect()->route('proyek.show', $proyek)->with('error', 'Hanya arsitek yang dapat mengirim proposal.');
         }
@@ -49,6 +68,14 @@ class ProposalController extends Controller
         $ver = VerifikasiUser::where('user_id', $user->id)->first();
         if (! $ver || $ver->status !== 'verified') {
             return redirect()->route('proyek.show', $proyek)->with('error', 'Akun arsitek belum terverifikasi.');
+        }
+
+        $alreadySubmitted = Proposal::where('proyek_id', $proyek->id)
+            ->where('arsitek_id', $user->id)
+            ->exists();
+
+        if ($alreadySubmitted) {
+            return redirect()->route('proposal.index')->with('error', 'Anda sudah mengirim proposal untuk proyek ini.');
         }
 
         $data = $request->validate([
@@ -72,13 +99,55 @@ class ProposalController extends Controller
     public function show(Proposal $proposal)
     {
         $user = Auth::user();
-        // allow if arsitek owner or client owner of proyek
-        if ($user) {
-            if ($user->id !== $proposal->arsitek_id && $user->id !== $proposal->proyek->client_id && $user->role !== 'admin') {
-                abort(403);
-            }
+
+        if ($user->id !== $proposal->arsitek_id && $user->id !== $proposal->proyek->client_id && $user->role !== 'admin') {
+            abort(403);
         }
 
         return view('proposal.show', compact('proposal'));
+    }
+
+    public function terima(Proposal $proposal)
+    {
+        $user = Auth::user();
+        if ($user->id !== $proposal->proyek->client_id) {
+            abort(403);
+        }
+
+        if ($proposal->status !== 'pending') {
+            return redirect()->route('proposal.show', $proposal)->with('error', 'Proposal ini sudah diproses.');
+        }
+
+        DB::transaction(function () use ($proposal) {
+            Proposal::where('proyek_id', $proposal->proyek_id)
+                ->where('id', '!=', $proposal->id)
+                ->where('status', 'pending')
+                ->update(['status' => 'ditolak']);
+
+            $proposal->update(['status' => 'diterima']);
+
+            $proposal->proyek->update([
+                'arsitek_terpilih_id' => $proposal->arsitek_id,
+                'status' => 'progress',
+            ]);
+        });
+
+        return redirect()->route('proposal.show', $proposal)->with('success', 'Proposal berhasil diterima, proyek masuk status progress.');
+    }
+
+    public function tolak(Proposal $proposal)
+    {
+        $user = Auth::user();
+        if ($user->id !== $proposal->proyek->client_id) {
+            abort(403);
+        }
+
+        if ($proposal->status !== 'pending') {
+            return redirect()->route('proposal.show', $proposal)->with('error', 'Proposal ini sudah diproses.');
+        }
+
+        $proposal->update(['status' => 'ditolak']);
+
+        return redirect()->route('proposal.show', $proposal)->with('success', 'Proposal telah ditolak.');
     }
 }

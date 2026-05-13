@@ -8,6 +8,17 @@ class Proyek extends Model
 {
     protected $table = 'proyek';
 
+    protected $fillable = [
+        'client_id',
+        'judul',
+        'deskripsi',
+        'budget',
+        'deadline',
+        'lokasi',
+        'status',
+        'arsitek_terpilih_id',
+    ];
+
     public function client()
     {
         return $this->belongsTo(User::class, 'client_id');

@@ -4,6 +4,16 @@
 <div class="container mx-auto p-4">
     <h1 class="text-2xl font-bold mb-4">Daftar Proyek</h1>
 
+    @auth
+        <div class="mb-4 flex gap-2">
+            @if(auth()->user()->role === 'client')
+                <a href="{{ route('proyek.create') }}" class="rounded bg-green-600 px-4 py-2 text-white">Posting Proyek</a>
+                <a href="{{ route('proyek.my') }}" class="rounded bg-gray-700 px-4 py-2 text-white">Proyek Saya</a>
+            @endif
+            <a href="{{ route('proposal.index') }}" class="rounded bg-blue-600 px-4 py-2 text-white">Lihat Proposal</a>
+        </div>
+    @endauth
+
     <form method="get" action="{{ route('proyek.index') }}" class="mb-4">
         <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari judul, deskripsi, lokasi..." class="border rounded p-2 w-2/3" />
         <button class="bg-blue-600 text-white rounded px-3 py-2">Cari</button>
