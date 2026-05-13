@@ -16,5 +16,17 @@
         <h3 class="font-semibold">Status</h3>
         <p>{{ $proyek->status }}</p>
     </div>
+    @auth
+        @if(auth()->user()->role === 'arsitek')
+            @php
+                $ver = \App\Models\VerifikasiUser::where('user_id', auth()->id())->first();
+            @endphp
+            @if($ver && $ver->status === 'verified' && $proyek->status === 'open')
+                <div class="mt-4">
+                    <a href="{{ route('proposal.create', $proyek) }}" class="bg-blue-600 text-white px-4 py-2 rounded">Ajukan Proposal</a>
+                </div>
+            @endif
+        @endif
+    @endauth
 </div>
 @endsection
