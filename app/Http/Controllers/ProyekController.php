@@ -99,4 +99,32 @@ class ProyekController extends Controller
 
         return redirect()->route('proyek.show', $proyek)->with('success', 'Proyek berhasil diposting.');
     }
+
+    /**
+     * Update proyek status.
+     */
+    public function updateStatus(Request $request, Proyek $proyek)
+    {
+        $user = Auth::user();
+        $isClient = $user->id === $proyek->client_id;
+        $isSelectedArchitect = $user->id === $proyek->arsitek_terpilih_id;
+
+        if (! $isClient && ! $isSelectedArchitect) {
+            abort(403);
+        }
+
+        $newStatus = $request->input('status');
+        $validStatuses = ['open', 'progress', 'done'];
+
+        if (! in_array($newStatus, $validStatuses)) {
+            return redirect()->route('proyek.show', $proyek)->with('error', 'Status tidak valid.');
+        }
+
+        if ($proyek->status === 'progress' && $newStatus === 'done') {
+            $proyek->update(['status' => 'done']);
+            return redirect()->route('proyek.show', $proyek)->with('success', 'Proyek berhasil ditandai selesai.');
+        }
+
+        return redirect()->route('proyek.show', $proyek)->with('error', 'Tidak bisa ubah status pada tahap ini.');
+    }
 }

@@ -13,7 +13,7 @@
                 <div class="rounded border p-4">
                     <div class="flex flex-wrap items-center justify-between gap-2">
                         <h2 class="text-lg font-semibold">{{ $proyek->judul }}</h2>
-                        <span class="text-sm text-gray-600">Status: {{ $proyek->status }}</span>
+                        <span class="rounded px-2 py-1 text-sm font-semibold @if($proyek->status === 'open') bg-yellow-100 text-yellow-800 @elseif($proyek->status === 'progress') bg-blue-100 text-blue-800 @else bg-green-100 text-green-800 @endif">{{ strtoupper($proyek->status) }}</span>
                     </div>
                     <div class="mt-1 text-sm text-gray-600">Proposal masuk: {{ $proyek->proposal_count }}</div>
                     <div class="mt-3">

@@ -22,7 +22,20 @@
 
     <div class="mt-6">
         <h3 class="font-semibold">Status</h3>
-        <p>{{ $proyek->status }}</p>
+        <p class="mb-2 font-mono text-lg">{{ strtoupper($proyek->status) }}</p>
+
+        @auth
+            @if(auth()->user()->id === $proyek->client_id || auth()->user()->id === $proyek->arsitek_terpilih_id)
+                @if($proyek->status === 'progress')
+                    <form method="post" action="{{ route('proyek.updateStatus', $proyek) }}" class="inline">
+                        @csrf
+                        @method('PATCH')
+                        <input type="hidden" name="status" value="done">
+                        <button class="rounded bg-green-600 px-3 py-1 text-sm text-white">Tandai Selesai</button>
+                    </form>
+                @endif
+            @endif
+        @endauth
     </div>
     @auth
         @if(auth()->user()->role === 'arsitek')

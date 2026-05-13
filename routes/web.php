@@ -31,6 +31,7 @@ Route::get('/proyek/{proyek}', [ProyekController::class, 'show'])->name('proyek.
 Route::get('/client/proyek', [ProyekController::class, 'myProjects'])->name('proyek.my')->middleware('auth');
 Route::get('/client/proyek/create', [ProyekController::class, 'create'])->name('proyek.create')->middleware('auth');
 Route::post('/client/proyek', [ProyekController::class, 'store'])->name('proyek.store')->middleware('auth');
+Route::patch('/proyek/{proyek}/status', [ProyekController::class, 'updateStatus'])->name('proyek.updateStatus')->middleware('auth');
 
 // Proposal routes
 Route::get('/proyek/{proyek}/proposal/create', [ProposalController::class, 'create'])->name('proposal.create')->middleware('auth');
