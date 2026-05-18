@@ -5,6 +5,8 @@ use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\ProyekController;
 use App\Http\Controllers\ArsitekController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\ProfilArsitekController;
+use App\Http\Controllers\PortofolioController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -46,7 +48,20 @@ Route::patch('/proposal/{proposal}/tolak', [ProposalController::class, 'tolak'])
 Route::get('/proyek/{proyek}/rating/create', [RatingController::class, 'create'])->name('rating.create')->middleware('auth');
 Route::post('/proyek/{proyek}/rating', [RatingController::class, 'store'])->name('rating.store')->middleware('auth');
 
-// Profil arsitek
+// Arsitek manage profile and portofolio
+Route::middleware('auth')->group(function () {
+    Route::get('/arsitek/profile/edit', [ProfilArsitekController::class, 'edit'])->name('arsitek.profile.edit');
+    Route::patch('/arsitek/profile', [ProfilArsitekController::class, 'update'])->name('arsitek.profile.update');
+
+    Route::get('/arsitek/portofolio', [PortofolioController::class, 'index'])->name('portofolio.index');
+    Route::get('/arsitek/portofolio/create', [PortofolioController::class, 'create'])->name('portofolio.create');
+    Route::post('/arsitek/portofolio', [PortofolioController::class, 'store'])->name('portofolio.store');
+    Route::get('/arsitek/portofolio/{portofolio}/edit', [PortofolioController::class, 'edit'])->name('portofolio.edit');
+    Route::patch('/arsitek/portofolio/{portofolio}', [PortofolioController::class, 'update'])->name('portofolio.update');
+    Route::delete('/arsitek/portofolio/{portofolio}', [PortofolioController::class, 'destroy'])->name('portofolio.destroy');
+});
+
+// Profil arsitek (placed after arsitek-specific fixed routes to avoid catching '/arsitek/portofolio')
 Route::get('/arsitek/{user}', [ArsitekController::class, 'show'])->name('arsitek.show')->middleware('auth');
 
 require __DIR__ . '/auth.php';
