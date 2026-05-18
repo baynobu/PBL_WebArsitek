@@ -13,6 +13,7 @@ class VerifikasiUser extends Model
     protected $fillable = [
         'user_id',
         'status',
+        'admin_id',
         'created_at',
     ];
 

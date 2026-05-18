@@ -24,7 +24,12 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
+                            <div class="flex items-center gap-2">
+                                <span>{{ Auth::user()->name }}</span>
+                                <span class="text-[10px] px-2 py-1 rounded-full {{ Auth::user()->email_verified_at ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }}">
+                                    {{ Auth::user()->email_verified_at ? 'Verified' : 'Pending' }}
+                                </span>
+                            </div>
 
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -35,6 +40,9 @@
                     </x-slot>
 
                     <x-slot name="content">
+                        <div class="px-4 py-2 text-xs text-gray-500 border-b border-gray-200 dark:border-gray-600">
+                            Status akun: <span class="font-semibold {{ Auth::user()->email_verified_at ? 'text-emerald-600' : 'text-amber-600' }}">{{ Auth::user()->email_verified_at ? 'Terverifikasi' : 'Belum diverifikasi' }}</span>
+                        </div>
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
@@ -87,6 +95,9 @@
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                <div class="mt-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold {{ Auth::user()->email_verified_at ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }}">
+                    {{ Auth::user()->email_verified_at ? 'Akun terverifikasi' : 'Akun belum diverifikasi' }}
+                </div>
             </div>
 
             <div class="mt-3 space-y-1">

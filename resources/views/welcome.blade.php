@@ -84,9 +84,21 @@
 
             <div class="flex gap-4 items-center">
                 @auth
+                    <div class="hidden md:flex items-center gap-3 mr-2">
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold {{ auth()->user()->email_verified_at ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }}">
+                            {{ auth()->user()->email_verified_at ? 'Akun Terverifikasi' : 'Menunggu Verifikasi' }}
+                        </span>
+                        <span class="text-sm text-gray-600">{{ auth()->user()->name }}</span>
+                    </div>
                     <a href="/dashboard" class="btn-primary">
                         Dashboard
                     </a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="px-6 py-2 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-100">
+                            Logout
+                        </button>
+                    </form>
                 @else
                     <a href="/login" class="px-6 py-2 text-gray-700 font-medium hover:text-blue-600">
                         Login
@@ -135,6 +147,12 @@
                     <a href="/dashboard" class="btn-primary text-lg">
                         Ke Dashboard →
                     </a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="btn-secondary text-lg border-gray-300 text-gray-700 hover:text-blue-600 hover:border-blue-600">
+                            Logout
+                        </button>
+                    </form>
                 @else
                     <a href="/register" class="btn-primary text-lg">
                         Mulai Sekarang →
