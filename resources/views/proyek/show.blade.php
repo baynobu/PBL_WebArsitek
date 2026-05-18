@@ -37,6 +37,23 @@
             @endif
         @endauth
     </div>
+
+    <div class="mt-6">
+        <h3 class="font-semibold">Rating</h3>
+        @if($proyek->rating)
+            <div class="rounded border p-3 mt-2">
+                <div class="font-semibold">Nilai: {{ $proyek->rating->nilai }}/5</div>
+                <div class="text-sm text-gray-600">Komentar: {{ $proyek->rating->komentar ?? '-' }}</div>
+            </div>
+        @else
+            @auth
+                @if(auth()->user()->id === $proyek->client_id && $proyek->status === 'done')
+                    <a href="{{ route('rating.create', $proyek) }}" class="inline-block mt-2 rounded bg-indigo-600 px-3 py-1 text-sm text-white">Beri Rating</a>
+                @endif
+            @endauth
+        @endif
+    </div>
+
     @auth
         @if(auth()->user()->role === 'arsitek')
             @php

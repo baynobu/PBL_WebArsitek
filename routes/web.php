@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\ProyekController;
 use App\Http\Controllers\ArsitekController;
+use App\Http\Controllers\RatingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -40,6 +41,10 @@ Route::get('/proposals', [ProposalController::class, 'index'])->name('proposal.i
 Route::get('/proposal/{proposal}', [ProposalController::class, 'show'])->name('proposal.show')->middleware('auth');
 Route::patch('/proposal/{proposal}/terima', [ProposalController::class, 'terima'])->name('proposal.terima')->middleware('auth');
 Route::patch('/proposal/{proposal}/tolak', [ProposalController::class, 'tolak'])->name('proposal.tolak')->middleware('auth');
+
+// Rating routes (Milestone 5)
+Route::get('/proyek/{proyek}/rating/create', [RatingController::class, 'create'])->name('rating.create')->middleware('auth');
+Route::post('/proyek/{proyek}/rating', [RatingController::class, 'store'])->name('rating.store')->middleware('auth');
 
 // Profil arsitek
 Route::get('/arsitek/{user}', [ArsitekController::class, 'show'])->name('arsitek.show')->middleware('auth');

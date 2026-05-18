@@ -6,12 +6,34 @@
 
     <h1 class="mt-2 text-2xl font-bold">Profil Arsitek: {{ $arsitek->name }}</h1>
 
+    <div class="mt-2">
+        <strong>Rating rata-rata:</strong> {{ number_format($arsitek->ratingSebagaiArsitek()->avg('nilai') ?? 0, 1) }} / 5
+        <div class="text-sm text-gray-600">Jumlah rating: {{ $arsitek->ratingSebagaiArsitek()->count() }}</div>
+    </div>
+
     <div class="mt-4 rounded border p-4">
         <div><strong>Email:</strong> {{ $arsitek->email }}</div>
         <div class="mt-2"><strong>Skill:</strong> {{ $arsitek->profilArsitek->skill ?? '-' }}</div>
         <div class="mt-2"><strong>Deskripsi:</strong></div>
         <p>{{ $arsitek->profilArsitek->deskripsi ?? 'Belum ada deskripsi profil.' }}</p>
         <div class="mt-2"><strong>Pengalaman:</strong> {{ $arsitek->profilArsitek->pengalaman ?? '-' }}</div>
+    </div>
+
+    <div class="mt-6">
+        <h2 class="text-xl font-semibold">Ulasan</h2>
+        @if($arsitek->ratingSebagaiArsitek()->count())
+            <div class="mt-3 space-y-3">
+                @foreach($arsitek->ratingSebagaiArsitek as $rating)
+                    <div class="rounded border p-3">
+                        <div class="font-semibold">{{ $rating->nilai }} / 5</div>
+                        <div class="text-sm text-gray-600">{{ $rating->komentar ?? '-' }}</div>
+                        <div class="text-xs text-gray-500 mt-1">oleh client id: {{ $rating->client_id }}</div>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <p class="mt-2 text-sm text-gray-600">Belum ada ulasan.</p>
+        @endif
     </div>
 
     <div class="mt-6">
