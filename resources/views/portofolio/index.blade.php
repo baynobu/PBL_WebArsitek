@@ -1,42 +1,58 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold">Portofolio Saya</h1>
-
-    @if(session('success'))
-        <div class="mb-4 rounded border border-green-300 bg-green-50 p-3 text-green-700">{{ session('success') }}</div>
-    @endif
-
-    <div class="mt-4 mb-4">
-        <a href="{{ route('portofolio.create') }}" class="rounded bg-blue-600 px-3 py-1 text-white">Tambah Portofolio</a>
-    </div>
-
-    @if($items->count())
-        <div class="grid grid-cols-1 gap-4">
-            @foreach($items as $item)
-                <div class="rounded border p-3 flex gap-4 items-start">
-                    <img src="{{ asset('storage/' . $item->gambar) }}" class="w-32 h-24 object-cover rounded" alt="gambar">
-                    <div class="flex-1">
-                        <h3 class="font-semibold">{{ $item->judul }}</h3>
-                        <div class="text-sm text-gray-600">{{ $item->kategori }}</div>
-                        <p class="mt-2 text-sm">{{ Str::limit($item->deskripsi, 200) }}</p>
-                        <div class="mt-3 flex gap-2">
-                            <a href="{{ route('portofolio.edit', $item) }}" class="rounded bg-yellow-600 px-3 py-1 text-sm text-white">Edit</a>
-                            <form action="{{ route('portofolio.destroy', $item) }}" method="post" onsubmit="return confirm('Hapus portofolio?')">
-                                @csrf
-                                @method('DELETE')
-                                <button class="rounded bg-red-600 px-3 py-1 text-sm text-white">Hapus</button>
-                            </form>
-                        </div>
-                    </div>
+<div class="py-10">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-6">
+        <div class="rounded-2xl bg-gradient-to-r from-pink-600 to-fuchsia-600 px-6 py-6 text-white shadow-lg">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                    <p class="text-xs uppercase tracking-[0.2em] text-pink-100">Arsitek Workspace</p>
+                    <h1 class="mt-2 text-3xl font-bold">Portofolio Saya</h1>
+                    <p class="mt-2 text-sm text-pink-100">Tampilkan karya terbaik Anda dalam galeri yang rapi dan profesional.</p>
                 </div>
-            @endforeach
+                <a href="{{ route('portofolio.create') }}" class="inline-flex items-center rounded-lg bg-white px-4 py-2 text-sm font-semibold text-pink-700 hover:bg-pink-50">Tambah Portofolio</a>
+            </div>
         </div>
 
-        <div class="mt-4">{{ $items->links() }}</div>
-    @else
-        <p class="text-sm text-gray-600">Belum ada portofolio.</p>
-    @endif
+        @if(session('success'))
+            <div class="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-700">{{ session('success') }}</div>
+        @endif
+
+        @if($items->count())
+            <div class="grid gap-5">
+                @foreach($items as $item)
+                    <article class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-gray-200 transition hover:-translate-y-0.5 hover:shadow-lg dark:bg-gray-800 dark:ring-gray-700 md:flex">
+                        <div class="md:w-72">
+                            <img src="{{ asset('storage/' . $item->gambar) }}" class="h-56 w-full object-cover md:h-full" alt="gambar">
+                        </div>
+                        <div class="flex-1 p-6">
+                            <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ $item->judul }}</h3>
+                                    <div class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ $item->kategori }}</div>
+                                    <p class="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-300">{{ Str::limit($item->deskripsi, 200) }}</p>
+                                </div>
+
+                                <div class="flex flex-wrap gap-2">
+                                    <a href="{{ route('portofolio.edit', $item) }}" class="inline-flex items-center rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-600">Edit</a>
+                                    <form action="{{ route('portofolio.destroy', $item) }}" method="post" onsubmit="return confirm('Hapus portofolio?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="inline-flex items-center rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700">Hapus</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+
+            <div class="pt-2">{{ $items->links() }}</div>
+        @else
+            <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-10 text-center text-gray-500 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
+                Belum ada portofolio.
+            </div>
+        @endif
+    </div>
 </div>
 @endsection

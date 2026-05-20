@@ -1,4 +1,34 @@
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+    @php
+        $user = auth()->user();
+        $role = $user?->role;
+
+        $menuItems = [
+            ['label' => 'Dashboard', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
+            ['label' => 'Daftar Proyek', 'href' => route('proyek.index'), 'active' => request()->routeIs('proyek.index') || request()->routeIs('proyek.show')],
+        ];
+
+        if ($role === 'client') {
+            $menuItems = [
+                ['label' => 'Dashboard', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
+                ['label' => 'Daftar Proyek', 'href' => route('proyek.index'), 'active' => request()->routeIs('proyek.index') || request()->routeIs('proyek.show')],
+                ['label' => 'Proyek Saya', 'href' => route('proyek.my'), 'active' => request()->routeIs('proyek.my') || request()->routeIs('proyek.create')],
+                ['label' => 'Lihat Proposal', 'href' => route('proposal.index'), 'active' => request()->routeIs('proposal.index') || request()->routeIs('proposal.show')],
+            ];
+            $menuItems[] = ['label' => 'Buat Proyek', 'href' => route('proyek.create'), 'active' => request()->routeIs('proyek.create')];
+        }
+
+        if ($role === 'arsitek') {
+            $menuItems[] = ['label' => 'Daftar Proposal', 'href' => route('proposal.index'), 'active' => request()->routeIs('proposal.index') || request()->routeIs('proposal.show') || request()->routeIs('proposal.create')];
+            $menuItems[] = ['label' => 'Portofolio Saya', 'href' => route('portofolio.index'), 'active' => request()->routeIs('portofolio.index') || request()->routeIs('portofolio.create') || request()->routeIs('portofolio.edit')];
+            $menuItems[] = ['label' => 'Edit Profil', 'href' => route('arsitek.profile.edit'), 'active' => request()->routeIs('arsitek.profile.edit')];
+        }
+
+        if ($role === 'admin') {
+            $menuItems[] = ['label' => 'Panel Admin', 'href' => url('/admin'), 'active' => request()->is('admin') || request()->is('admin/*')];
+        }
+    @endphp
+
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -11,10 +41,12 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                <div class="hidden space-x-6 sm:-my-px sm:ms-10 sm:flex">
+                    @foreach ($menuItems as $item)
+                        <x-nav-link :href="$item['href']" :active="$item['active']">
+                            {{ __($item['label']) }}
+                        </x-nav-link>
+                    @endforeach
                 </div>
             </div>
 
@@ -84,9 +116,11 @@
         <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            @foreach ($menuItems as $item)
+                <x-responsive-nav-link :href="$item['href']" :active="$item['active']">
+                    {{ __($item['label']) }}
+                </x-responsive-nav-link>
+            @endforeach
         </div>
 
         <!-- Responsive Settings Options -->

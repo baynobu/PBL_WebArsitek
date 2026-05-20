@@ -15,11 +15,13 @@ class ProyekController extends Controller
     {
         $query = Proyek::query()->where('status', 'open');
 
-        if ($q = $request->query('q')) {
-            $query->where(function ($qBuilder) use ($q) {
-                $qBuilder->where('judul', 'like', "%{$q}%")
-                    ->orWhere('deskripsi', 'like', "%{$q}%")
-                    ->orWhere('lokasi', 'like', "%{$q}%");
+        $search = trim((string) $request->input('q', ''));
+
+        if ($search !== '') {
+            $query->where(function ($qBuilder) use ($search) {
+                $qBuilder->where('judul', 'like', "%{$search}%")
+                    ->orWhere('deskripsi', 'like', "%{$search}%")
+                    ->orWhere('lokasi', 'like', "%{$search}%");
             });
         }
 
