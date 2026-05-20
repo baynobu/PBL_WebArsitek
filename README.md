@@ -62,7 +62,7 @@ php artisan key:generate
 5. Migrasi Database
 ```bash
 php artisan migrate
-php artisan db:seed --seed
+php artisan migrate:fresh --seed
 ```
 
 6. Install Dependency Frontend
@@ -79,53 +79,3 @@ npm run dev
 ```bash
 php artisan serve
 ```
-
-## Update
-1. 🔐 Authentication & Authorization
-Aplikasi ini sudah mengimplementasikan sistem autentikasi menggunakan:
-- Laravel Breeze
-
-Fitur:
-- Registrasi user
-- Login & logout
-- Session management
-
-2. 🔒 Proteksi Akses (Middleware)
-Aplikasi menggunakan custom middleware:
-"RoleMiddleware"
-```bash
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    // route admin
-});
-```
-
-3. 🛠 Admin Panel
-Admin panel dibangun menggunakan:
-
-Filament
-Akses:
-```bash
-http://127.0.0.1:8000/admin
-```
-
-4. 🔐 Proteksi Admin Panel
-Hanya user dengan role admin yang dapat mengakses panel:
-```bash
-public function canAccessPanel(\Filament\Panel $panel): bool
-{
-    return $this->role === 'admin';
-}
-```
-
-## Struktur Sistem Saat Ini
-✔ Backend
-- Laravel (MVC)
-- MySQL Database
-
-✔ Frontend
-- Blade (Laravel)
-- Vite
-
-✔ Tools
-- Laragon
-- Git
