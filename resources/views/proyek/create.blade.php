@@ -39,6 +39,13 @@
                 </div>
 
                 <div>
+                    <label class="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-200">Durasi Open Project (hari)</label>
+                    <input type="number" name="open_duration_days" value="{{ old('open_duration_days', 14) }}" class="w-full rounded-lg border-gray-300 bg-gray-50 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100" min="3" max="90">
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Setelah durasi ini lewat, proyek dapat dianggap ditutup untuk proposal baru.</p>
+                    @error('open_duration_days')<div class="mt-1 text-sm text-red-600">{{ $message }}</div>@enderror
+                </div>
+
+                <div>
                     <label class="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-200">Lokasi</label>
                     <input type="text" name="lokasi" value="{{ old('lokasi') }}" class="w-full rounded-lg border-gray-300 bg-gray-50 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100">
                     @error('lokasi')<div class="mt-1 text-sm text-red-600">{{ $message }}</div>@enderror

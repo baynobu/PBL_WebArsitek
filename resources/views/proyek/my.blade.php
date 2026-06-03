@@ -30,10 +30,22 @@
                                     <span>Proposal masuk: {{ $proyek->proposal_count }}</span>
                                     <span>Budget: {{ number_format($proyek->budget, 0, ',', '.') }}</span>
                                     <span>Deadline: {{ $proyek->deadline }}</span>
+                                    <span>Open: {{ $proyek->open_duration_days ?? '-' }} hari</span>
+                                    <span>Progress: {{ $proyek->progress_percent ?? 0 }}%</span>
                                 </div>
+                                @if($proyek->progress_note)
+                                    <p class="max-w-3xl text-sm text-gray-600 dark:text-gray-300">{{ $proyek->progress_note }}</p>
+                                @endif
                             </div>
 
-                            <a href="{{ route('proyek.show', $proyek) }}" class="inline-flex h-fit items-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 dark:bg-slate-700">Kelola Proyek</a>
+                            <div class="flex flex-col gap-2 sm:flex-row">
+                                <a href="{{ route('proyek.show', $proyek) }}" class="inline-flex h-fit items-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 dark:bg-slate-700">Kelola Proyek</a>
+                                <form method="post" action="{{ route('proyek.destroy', $proyek) }}" onsubmit="return confirm('Hapus proyek ini?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="inline-flex h-fit items-center rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700">Hapus</button>
+                                </form>
+                            </div>
                         </div>
                     </article>
                 @endforeach

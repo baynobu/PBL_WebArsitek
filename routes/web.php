@@ -7,10 +7,18 @@ use App\Http\Controllers\ArsitekController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\ProfilArsitekController;
 use App\Http\Controllers\PortofolioController;
+use App\Models\LandingPageContent;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    $landingContents = LandingPageContent::query()
+        ->where('is_active', true)
+        ->orderBy('sort_order')
+        ->get()
+        ->groupBy('section')
+        ->map(fn ($items) => $items->keyBy('key'));
+
+    return view('welcome', compact('landingContents'));
 });
 
 Route::get('/dashboard', function () {
@@ -24,13 +32,14 @@ Route::middleware('auth')->group(function () {
 });
 
 // Proyek - public listing and detail (Milestone 1)
-Route::get('/proyek', [ProyekController::class, 'index'])->name('proyek.index');
-Route::get('/proyek/{proyek}', [ProyekController::class, 'show'])->name('proyek.show');
+Route::get('/proyek', [ProyekController::class, 'index'])->middleware(['auth', 'account.verified'])->name('proyek.index');
+Route::get('/proyek/{proyek}', [ProyekController::class, 'show'])->middleware(['auth', 'account.verified'])->name('proyek.show');
 
 Route::middleware(['auth', 'account.verified', 'role:client'])->group(function () {
     Route::get('/client/proyek', [ProyekController::class, 'myProjects'])->name('proyek.my');
     Route::get('/client/proyek/create', [ProyekController::class, 'create'])->name('proyek.create');
     Route::post('/client/proyek', [ProyekController::class, 'store'])->name('proyek.store');
+    Route::delete('/client/proyek/{proyek}', [ProyekController::class, 'destroy'])->name('proyek.destroy');
     Route::get('/proyek/{proyek}/rating/create', [RatingController::class, 'create'])->name('rating.create');
     Route::post('/proyek/{proyek}/rating', [RatingController::class, 'store'])->name('rating.store');
     Route::patch('/proposal/{proposal}/terima', [ProposalController::class, 'terima'])->name('proposal.terima');
@@ -39,9 +48,15 @@ Route::middleware(['auth', 'account.verified', 'role:client'])->group(function (
 
 Route::middleware(['auth', 'account.verified', 'role:client,arsitek'])->group(function () {
     Route::patch('/proyek/{proyek}/status', [ProyekController::class, 'updateStatus'])->name('proyek.updateStatus');
+    Route::patch('/proyek/{proyek}/tasks/{task}', [ProyekController::class, 'toggleTask'])->name('proyek.tasks.toggle');
+});
+
+Route::middleware(['auth', 'account.verified', 'role:client'])->group(function () {
+    Route::post('/proyek/{proyek}/tasks', [ProyekController::class, 'storeTask'])->name('proyek.tasks.store');
 });
 
 Route::middleware(['auth', 'account.verified', 'role:arsitek'])->group(function () {
+    Route::get('/arsitek/proyek', [ArsitekController::class, 'myProjects'])->name('arsitek.proyek');
     Route::get('/proyek/{proyek}/proposal/create', [ProposalController::class, 'create'])->name('proposal.create');
     Route::post('/proyek/{proyek}/proposal', [ProposalController::class, 'store'])->name('proposal.store');
 

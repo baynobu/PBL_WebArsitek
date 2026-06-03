@@ -47,6 +47,20 @@
             @endif
         </div>
 
+        <div class="grid gap-4 md:grid-cols-2">
+            <div>
+                <x-input-label for="phone_number" value="Nomor Telepon" />
+                <x-text-input id="phone_number" name="phone_number" type="text" class="mt-1 block w-full" :value="old('phone_number', $user->phone_number)" autocomplete="tel" />
+                <x-input-error class="mt-2" :messages="$errors->get('phone_number')" />
+            </div>
+
+            <div>
+                <x-input-label for="whatsapp_number" value="Nomor WhatsApp" />
+                <x-text-input id="whatsapp_number" name="whatsapp_number" type="text" class="mt-1 block w-full" :value="old('whatsapp_number', $user->whatsapp_number)" autocomplete="tel" />
+                <x-input-error class="mt-2" :messages="$errors->get('whatsapp_number')" />
+            </div>
+        </div>
+
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 

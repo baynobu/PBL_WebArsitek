@@ -121,10 +121,9 @@ class ProposalController extends Controller
         DB::transaction(function () use ($proposal) {
             Proposal::where('proyek_id', $proposal->proyek_id)
                 ->where('id', '!=', $proposal->id)
-                ->where('status', 'pending')
-                ->update(['status' => 'ditolak']);
+                ->update(['status' => 'rejected']);
 
-            $proposal->update(['status' => 'diterima']);
+            $proposal->update(['status' => 'accepted']);
 
             $proposal->proyek->update([
                 'arsitek_terpilih_id' => $proposal->arsitek_id,
@@ -146,7 +145,7 @@ class ProposalController extends Controller
             return redirect()->route('proposal.show', $proposal)->with('error', 'Proposal ini sudah diproses.');
         }
 
-        $proposal->update(['status' => 'ditolak']);
+        $proposal->update(['status' => 'rejected']);
 
         return redirect()->route('proposal.show', $proposal)->with('success', 'Proposal telah ditolak.');
     }

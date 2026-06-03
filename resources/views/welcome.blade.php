@@ -73,6 +73,20 @@
 </head>
 
 <body class="bg-white text-gray-900 overflow-x-hidden">
+    @php
+        $heroBadge = data_get($landingContents ?? [], 'hero.badge.value', '🏗️ Marketplace Lowongan Kerja Arsitek Profesional');
+        $heroTitlePartOne = data_get($landingContents ?? [], 'hero.title_part_1.value', 'Hubungkan Ide');
+        $heroTitlePartTwo = data_get($landingContents ?? [], 'hero.title_part_2.value', 'Dengan Talenta Arsitek');
+        $heroSubtitle = data_get($landingContents ?? [], 'hero.subtitle.value', 'Platform terpercaya untuk menemukan, merekrut, dan berkolaborasi dengan arsitek profesional berbasis proyek kontrak dan freelance.');
+        $heroPrimaryCta = data_get($landingContents ?? [], 'hero.primary_cta.value', 'Mulai Sekarang');
+        $heroSecondaryCta = data_get($landingContents ?? [], 'hero.secondary_cta.value', 'Login');
+        $projectsCount = data_get($landingContents ?? [], 'stats.projects_count.value', '100+ Lowongan Proyek');
+        $architectCount = data_get($landingContents ?? [], 'stats.architect_count.value', '250+ Arsitek Profesional');
+        $ratingScore = data_get($landingContents ?? [], 'stats.rating_score.value', '4.8/5 Rating');
+        $featureRole = data_get($landingContents ?? [], 'feature.account_role.value', 'Daftar sebagai Arsitek, Client, atau Admin. Verifikasi akun untuk keamanan maksimal.');
+        $featureMarketplace = data_get($landingContents ?? [], 'feature.marketplace.value', 'Client posting lowongan dengan judul, deskripsi, budget, deadline, dan lokasi yang jelas.');
+        $featureProposal = data_get($landingContents ?? [], 'feature.proposal_system.value', 'Arsitek submit proposal dengan harga, durasi, dan penawaran unik mereka untuk setiap proyek.');
+    @endphp
 
     <!-- Navbar -->
     <nav class="sticky top-0 z-50 navbar-blur border-b border-white/20 shadow-sm">
@@ -127,25 +141,24 @@
         <div class="relative max-w-4xl mx-auto text-center">
             <div class="mb-8">
                 <span class="inline-block px-4 py-2 bg-blue-100 text-blue-600 rounded-full text-sm font-semibold mb-6">
-                    🏗️ Marketplace Lowongan Kerja Arsitek Profesional
+                    {{ $heroBadge }}
                 </span>
             </div>
 
             <h2 class="text-5xl md:text-6xl lg:text-7xl font-black mb-8 leading-tight">
-                <span class="gradient-text">Hubungkan Ide</span>
+                <span class="gradient-text">{{ $heroTitlePartOne }}</span>
                 <br>
-                <span class="text-gray-900">Dengan Talenta Arsitek</span>
+                <span class="text-gray-900">{{ $heroTitlePartTwo }}</span>
             </h2>
 
             <p class="text-xl md:text-2xl text-gray-600 mb-12 leading-relaxed max-w-2xl mx-auto">
-                Platform terpercaya untuk menemukan, merekrut, dan berkolaborasi dengan arsitek profesional berbasis
-                proyek kontrak dan freelance.
+                {{ $heroSubtitle }}
             </p>
 
             <div class="flex flex-col md:flex-row gap-6 justify-center items-center mt-12">
                 @auth
                     <a href="/dashboard" class="btn-primary text-lg">
-                        Ke Dashboard →
+                        {{ $heroPrimaryCta }} →
                     </a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
@@ -155,19 +168,19 @@
                     </form>
                 @else
                     <a href="/register" class="btn-primary text-lg">
-                        Mulai Sekarang →
+                        {{ $heroPrimaryCta }} →
                     </a>
                     <a href="/login" class="btn-secondary text-lg">
-                        Login
+                        {{ $heroSecondaryCta }}
                     </a>
                 @endauth
             </div>
 
             <!-- Social Proof -->
             <div class="flex flex-wrap justify-center gap-8 mt-16 text-sm text-gray-600">
-                <div>📊 100+ Lowongan Proyek</div>
-                <div>👥 250+ Arsitek Profesional</div>
-                <div>⭐ 4.8/5 Rating</div>
+                <div>📊 {{ $projectsCount }}</div>
+                <div>👥 {{ $architectCount }}</div>
+                <div>⭐ {{ $ratingScore }}</div>
             </div>
         </div>
     </section>
@@ -271,7 +284,7 @@
                     <div class="text-5xl mb-4">📝</div>
                     <h4 class="text-2xl font-bold mb-4 gradient-text">Manajemen Akun & Role</h4>
                     <p class="text-gray-600 mb-4">
-                        Daftar sebagai Arsitek, Client, atau Admin. Verifikasi akun untuk keamanan maksimal.
+                        {{ $featureRole }}
                     </p>
                     <ul class="text-sm text-gray-600 space-y-2">
                         <li>✓ Registrasi mudah</li>
@@ -285,7 +298,7 @@
                     <div class="text-5xl mb-4">🏢</div>
                     <h4 class="text-2xl font-bold mb-4 gradient-text">Marketplace Lowongan Proyek</h4>
                     <p class="text-gray-600 mb-4">
-                        Client posting lowongan dengan judul, deskripsi, budget, deadline, dan lokasi yang jelas.
+                        {{ $featureMarketplace }}
                     </p>
                     <ul class="text-sm text-gray-600 space-y-2">
                         <li>✓ Post lowongan mudah</li>
@@ -299,7 +312,7 @@
                     <div class="text-5xl mb-4">💌</div>
                     <h4 class="text-2xl font-bold mb-4 gradient-text">Sistem Proposal</h4>
                     <p class="text-gray-600 mb-4">
-                        Arsitek submit proposal dengan harga, durasi, dan penawaran unik mereka untuk setiap proyek.
+                        {{ $featureProposal }}
                     </p>
                     <ul class="text-sm text-gray-600 space-y-2">
                         <li>✓ Submit proposal custom</li>

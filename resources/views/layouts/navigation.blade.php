@@ -19,6 +19,7 @@
         }
 
         if ($role === 'arsitek') {
+            $menuItems[] = ['label' => 'Proyek Saya', 'href' => route('arsitek.proyek'), 'active' => request()->routeIs('arsitek.proyek')];
             $menuItems[] = ['label' => 'Daftar Proposal', 'href' => route('proposal.index'), 'active' => request()->routeIs('proposal.index') || request()->routeIs('proposal.show') || request()->routeIs('proposal.create')];
             $menuItems[] = ['label' => 'Portofolio Saya', 'href' => route('portofolio.index'), 'active' => request()->routeIs('portofolio.index') || request()->routeIs('portofolio.create') || request()->routeIs('portofolio.edit')];
             $menuItems[] = ['label' => 'Edit Profil', 'href' => route('arsitek.profile.edit'), 'active' => request()->routeIs('arsitek.profile.edit')];
@@ -59,7 +60,7 @@
                             <div class="flex items-center gap-2">
                                 <span>{{ Auth::user()->name }}</span>
                                 <span class="text-[10px] px-2 py-1 rounded-full {{ Auth::user()->email_verified_at ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }}">
-                                    {{ Auth::user()->email_verified_at ? 'Verified' : 'Pending' }}
+                                    {{ Auth::user()->email_verified_at ? 'Terverifikasi' : 'Belum Terverifikasi' }}
                                 </span>
                             </div>
 

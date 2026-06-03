@@ -6,7 +6,7 @@
         <div class="rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-6 text-white shadow-lg">
             <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                    <p class="text-xs uppercase tracking-[0.2em] text-blue-100">Marketplace</p>
+                    <p class="text-xs uppercase tracking-[0.2em] text-blue-100">Lokapasar</p>
                     <h1 class="mt-2 text-3xl font-bold">Daftar Proyek</h1>
                     <p class="mt-2 max-w-2xl text-sm text-blue-100">Temukan lowongan proyek arsitek yang aktif dan sesuai dengan kebutuhan Anda.</p>
                 </div>
@@ -36,6 +36,8 @@
                                 <div class="flex flex-wrap gap-3 text-sm text-gray-500 dark:text-gray-400">
                                     <span>Lokasi: {{ $p->lokasi ?? '-' }}</span>
                                     <span>Budget: {{ number_format($p->budget, 0, ',', '.') }}</span>
+                                    <span>Open: {{ $p->open_duration_days ?? '-' }} hari</span>
+                                    <span>Progress: {{ $p->progress_percent ?? 0 }}%</span>
                                 </div>
                             </div>
 

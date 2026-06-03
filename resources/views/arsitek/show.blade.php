@@ -18,6 +18,8 @@
             <div class="lg:col-span-2 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700">
                 <div class="space-y-4">
                     <div class="text-sm text-gray-500 dark:text-gray-400">Email: <span class="font-semibold text-gray-900 dark:text-white">{{ $arsitek->email }}</span></div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Telepon: <span class="font-semibold text-gray-900 dark:text-white">{{ $arsitek->phone_number ?? '-' }}</span></div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">WhatsApp: <span class="font-semibold text-gray-900 dark:text-white">{{ $arsitek->whatsapp_number ?? '-' }}</span></div>
                     <div class="rounded-2xl bg-gray-50 p-4 dark:bg-gray-900">
                         <div class="text-xs uppercase tracking-wide text-gray-500">Skill</div>
                         <div class="mt-2 text-sm text-gray-700 dark:text-gray-300">{{ $arsitek->profilArsitek->skill ?? '-' }}</div>

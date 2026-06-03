@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Proyek extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'proyek';
 
     protected $fillable = [
@@ -17,6 +20,17 @@ class Proyek extends Model
         'lokasi',
         'status',
         'arsitek_terpilih_id',
+        'open_at',
+        'open_until',
+        'open_duration_days',
+        'progress_percent',
+        'progress_note',
+        'progress_updated_at',
+        'is_featured',
+        'is_hidden',
+        'moderated_by',
+        'moderated_at',
+        'moderation_note',
     ];
 
     public function client()
@@ -37,5 +51,39 @@ class Proyek extends Model
     public function rating()
     {
         return $this->hasOne(Rating::class, 'proyek_id');
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(ProyekTask::class, 'proyek_id');
+    }
+
+    public function moderatedBy()
+    {
+        return $this->belongsTo(User::class, 'moderated_by');
+    }
+
+    public function recalculateProgress(): void
+    {
+        $tasks = $this->tasks()->get();
+
+        if ($tasks->isEmpty()) {
+            return;
+        }
+
+        $totalWeight = (int) $tasks->sum('weight');
+        $completedWeight = (int) $tasks->where('is_done', true)->sum('weight');
+
+        $progress = $totalWeight > 0
+            ? (int) round(($completedWeight / $totalWeight) * 100)
+            : 0;
+
+        $this->forceFill([
+            'progress_percent' => min(100, max(0, $progress)),
+            'progress_note' => $tasks->where('is_done', false)->isNotEmpty()
+                ? 'Checklist proyek masih berjalan.'
+                : 'Seluruh checklist proyek sudah selesai.',
+            'progress_updated_at' => now(),
+        ])->saveQuietly();
     }
 }
