@@ -1,16 +1,26 @@
-<nav x-data="{ open: false, profileOpen: false }" class="relative z-50">
+<nav x-data="{ open: false, profileOpen: false, searchOpen: false, notificationsOpen: false }" class="relative z-50">
     @php
         $user = auth()->user();
         $role = $user?->role;
         $verified = $user?->email_verified_at;
+        $notifications = collect();
+        $unreadCount = 0;
+
+        if ($user && \Illuminate\Support\Facades\Schema::hasTable('notifications')) {
+            $notifications = $user->notifications()->latest()->limit(5)->get();
+            $unreadCount = $user->unreadNotifications()->count();
+        }
 
         $menuItems = [];
 
         if ($role === 'client') {
+            $currentProyek = request()->route('proyek');
+            $isCurrentProjectOwner = request()->routeIs('proyek.show') && optional($currentProyek)->client_id === auth()->id();
+
             $menuItems = [
                 ['label' => 'Beranda', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
-                ['label' => 'Daftar Proyek', 'href' => route('proyek.index'), 'active' => request()->routeIs('proyek.index') || request()->routeIs('proyek.show')],
-                ['label' => 'Proyek Saya', 'href' => route('proyek.my'), 'active' => request()->routeIs('proyek.my') || request()->routeIs('proyek.create')],
+                ['label' => 'Daftar Proyek', 'href' => route('proyek.index'), 'active' => request()->routeIs('proyek.index') || (request()->routeIs('proyek.show') && !$isCurrentProjectOwner)],
+                ['label' => 'Proyek Saya', 'href' => route('proyek.my'), 'active' => request()->routeIs('proyek.my') || request()->routeIs('proyek.create') || $isCurrentProjectOwner],
                 ['label' => 'Lihat Proposal', 'href' => route('proposal.index'), 'active' => request()->routeIs('proposal.index') || request()->routeIs('proposal.show')],
                 ['label' => 'Buat Proyek', 'href' => route('proyek.create'), 'active' => request()->routeIs('proyek.create')],
             ];
@@ -68,21 +78,45 @@
             </div>
 
             <div class="hidden lg:flex items-center gap-3">
-                <button type="button" class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-slate-950 shadow-sm shadow-slate-950/10 transition duration-200 hover:bg-slate-100">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" />
-                    </svg>
-                </button>
-                <button type="button" class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-slate-950 shadow-sm shadow-slate-950/10 transition duration-200 hover:bg-slate-100">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                    </svg>
-                </button>
-                <button type="button" class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-slate-950 shadow-sm shadow-slate-950/10 transition duration-200 hover:bg-slate-100">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16h8M8 12h6M8 8h8m-5 10a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                </button>
+                <div class="relative">
+                    <button type="button" @click="searchOpen = !searchOpen; notificationsOpen = false" class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-slate-950 shadow-sm shadow-slate-950/10 transition duration-200 hover:bg-slate-100">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" />
+                        </svg>
+                    </button>
+                    <div x-show="searchOpen" x-cloak @click.away="searchOpen = false" x-transition class="absolute right-0 z-50 mt-3 w-72 rounded-2xl border border-slate-200 bg-white p-4 shadow-xl">
+                        <form method="GET" action="{{ route('proyek.index') }}" class="flex items-center gap-2">
+                            <input name="q" type="search" value="{{ request('q') }}" placeholder="Cari proyek..." class="block w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-950 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20" />
+                            <button type="submit" class="inline-flex h-10 items-center justify-center rounded-2xl bg-amber-700 px-3 text-white">Go</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <button type="button" @click="notificationsOpen = !notificationsOpen; searchOpen = false" class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-slate-950 shadow-sm shadow-slate-950/10 transition duration-200 hover:bg-slate-100">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        @if($unreadCount)
+                            <span class="absolute -right-0.5 -top-0.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-500 px-1.5 text-[10px] font-semibold text-white">{{ $unreadCount }}</span>
+                        @endif
+                    </button>
+                    <div x-show="notificationsOpen" x-cloak @click.away="notificationsOpen = false" x-transition class="absolute right-0 z-50 mt-3 w-80 rounded-2xl border border-slate-200 bg-white p-4 shadow-xl">
+                        <p class="text-sm font-semibold text-slate-950">Notifikasi</p>
+                        <div class="mt-3 space-y-3">
+                            @if($notifications->isEmpty())
+                                <div class="rounded-2xl bg-slate-50 p-3 text-sm text-slate-500">Tidak ada notifikasi baru.</div>
+                            @else
+                                @foreach($notifications as $notification)
+                                    <div class="rounded-2xl border border-slate-100 bg-slate-50 p-3 text-sm text-slate-700">
+                                        {{ \Illuminate\Support\Str::limit($notification->data['message'] ?? $notification->type, 80) }}
+                                        <div class="mt-2 text-xs text-slate-500">{{ $notification->created_at->diffForHumans() }}</div>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                    </div>
+                </div>
 
                 <div class="relative">
                     <button @click="profileOpen = ! profileOpen" @click.away="profileOpen = false" class="inline-flex items-center gap-3 rounded-full border border-white bg-white px-2.5 py-2 text-sm font-medium text-slate-950 shadow-sm shadow-slate-950/10 transition duration-200 hover:bg-slate-100">
@@ -99,10 +133,10 @@
                     </button>
 
                     <div x-show="profileOpen" x-transition.opacity class="absolute right-0 z-50 mt-2 w-52 origin-top-right rounded-2xl border border-slate-800/60 bg-slate-950 p-2 shadow-xl ring-1 ring-slate-800/70">
-                        <a href="{{ route('profile.edit') }}" class="block rounded-2xl px-4 py-2 text-sm text-slate-100 transition hover:bg-slate-900">Kelola Profil</a>
+                        <a href="{{ route('profile.edit') }}" class="block rounded-2xl bg-slate-800 px-4 py-2 text-sm text-white transition hover:bg-slate-700">Kelola Profil</a>
                         <form method="POST" action="{{ route('logout') }}" class="mt-1">
                             @csrf
-                            <button type="submit" class="w-full rounded-2xl px-4 py-2 text-left text-sm text-slate-100 transition hover:bg-slate-900">Logout</button>
+                            <button type="submit" class="w-full rounded-2xl bg-slate-800 px-4 py-2 text-left text-sm text-white transition hover:bg-slate-700">Logout</button>
                         </form>
                     </div>
                 </div>
@@ -163,10 +197,10 @@
                         </div>
                     </div>
                     <div class="mt-4 space-y-2">
-                        <a href="{{ route('profile.edit') }}" class="block rounded-2xl bg-slate-900 px-4 py-3 text-sm text-white transition hover:bg-slate-800">Kelola Profil</a>
+                        <a href="{{ route('profile.edit') }}" class="block rounded-2xl bg-stone-800 px-4 py-3 text-sm text-white transition hover:bg-stone-700">Kelola Profil</a>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button type="submit" class="w-full rounded-2xl bg-slate-900 px-4 py-3 text-left text-sm text-white transition hover:bg-slate-800">Logout</button>
+                            <button type="submit" class="w-full rounded-2xl bg-stone-800 px-4 py-3 text-left text-sm text-white transition hover:bg-stone-700">Logout</button>
                         </form>
                     </div>
                 </div>

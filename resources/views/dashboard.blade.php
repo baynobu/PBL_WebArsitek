@@ -11,7 +11,7 @@
                         <p class="max-w-2xl text-base leading-8 text-slate-600">Ringkasan proyek premium Anda hadir dalam tata letak editorial yang lapang dan berkelas.</p>
                         <div class="flex flex-wrap items-center gap-3">
                             <a href="{{ route('proyek.create') }}"
-                            class="inline-flex items-center justify-center rounded-full bg-amber-700 px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-stone-900/10 transition hover:bg-orange-800">
+                            class="inline-flex items-center justify-center rounded-full bg-amber-700 px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-stone-900/10 transition hover:bg-amber-800">
                                 Buat Proyek Baru
                             </a>
                             <a href="{{ route('proyek.my') }}" class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-7 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-50">Kelola Proyek Saya</a>
@@ -62,9 +62,7 @@
                             <p class="text-base font-bold uppercase tracking-[0.14em] text-slate-950">Proyek yang Sedang Dikerjakan</p>
                             <p class="mt-2 max-w-2xl text-sm leading-7 text-slate-600">Lihat status proyek aktif Anda dalam bentuk editorial yang rapi dan mudah dibaca.</p>
                         </div>
-                        <span class="rounded-full bg-amber-700 px-5 py-2 text-xs font-semibold tracking-[0.3em] text-white">
-                            AKTIF
-                        </span>
+                        <span class="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-5 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-700">AKTIF</span>
                     </div>
 
                     <div class="mt-8 space-y-5">
@@ -84,7 +82,7 @@
                                         </p>
                                     </div>
 
-                                    <div class="whitespace-nowrap rounded-full bg-amber-50 px-5 py-2 text-xs font-semibold uppercase tracking-wider text-amber-700">
+                                    <div class="whitespace-nowrap rounded-full bg-sky-50 px-5 py-2 text-xs font-semibold uppercase tracking-wider text-sky-700">
                                         Sedang Berjalan
                                     </div>
                                 </div>
@@ -98,7 +96,7 @@
 
                                     <div class="h-2 overflow-hidden rounded-full bg-slate-100">
                                         <div
-                                            class="h-full rounded-full bg-gradient-to-r from-stone-900 via-stone-800 to-stone-700"
+                                            class="h-full rounded-full bg-gradient-to-r from-bg-gradient-to-r from-amber-500 to-amber-700"
                                             style="width: {{ $proyek->progress_percent ?? 0 }}%">
                                         </div>
                                     </div>
@@ -131,7 +129,7 @@
                                         <p class="text-base font-semibold text-slate-950">{{ $task->title }}</p>
                                         <p class="mt-2 text-sm text-slate-500">{{ $task->proyek?->judul ?? 'Proyek tidak tersedia' }}</p>
                                     </div>
-                                    <span class="rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] {{ $task->is_done ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-700' }}">{{ $task->is_done ? 'Selesai' : 'Dalam Proses' }}</span>
+                                    <span class="rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.22em] {{ $task->is_done ? 'bg-slate-100 text-slate-600' : 'bg-amber-100 text-amber-700' }}">{{ $task->is_done ? 'Selesai' : 'Dalam Proses' }}</span>
                                 </div>
                                 @if($task->description)
                                     <p class="mt-4 text-sm leading-7 text-slate-600">{{ $task->description }}</p>
