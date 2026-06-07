@@ -96,7 +96,7 @@ class ProyekController extends Controller
         ]);
 
         $openAt = now();
-        $openUntil = Carbon::parse($openAt)->addDays($data['open_duration_days']);
+        $openUntil = Carbon::parse($openAt)->addDays((int) $data['open_duration_days']);
 
         $proyek = Proyek::create([
             'client_id' => $user->id,

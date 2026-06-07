@@ -8,6 +8,9 @@ use App\Http\Controllers\RatingController;
 use App\Http\Controllers\ProfilArsitekController;
 use App\Http\Controllers\PortofolioController;
 use App\Models\LandingPageContent;
+use App\Models\Proyek;
+use App\Models\ProyekTask;
+use App\Models\Proposal;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -22,7 +25,35 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $user = auth()->user();
+
+    $projectsInProgress = Proyek::with(['arsitekTerpilih', 'tasks'])
+        ->where('client_id', $user->id)
+        ->where('status', 'progress')
+        ->orderBy('updated_at', 'desc')
+        ->get();
+
+    $totalProyek = Proyek::where('client_id', $user->id)->count();
+    $proyekAktif = $projectsInProgress->count();
+    $proposalMasuk = Proposal::whereHas('proyek', fn ($query) => $query->where('client_id', $user->id))
+        ->where('status', 'pending')
+        ->count();
+    $totalAnggaran = Proyek::where('client_id', $user->id)->sum('budget');
+
+    $recentTasks = ProyekTask::whereIn('proyek_id', $projectsInProgress->pluck('id'))
+        ->orderByDesc('updated_at')
+        ->limit(8)
+        ->get();
+
+    return view('dashboard', compact(
+        'user',
+        'projectsInProgress',
+        'totalProyek',
+        'proyekAktif',
+        'proposalMasuk',
+        'totalAnggaran',
+        'recentTasks'
+    ));
 })->middleware(['auth', 'account.verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
