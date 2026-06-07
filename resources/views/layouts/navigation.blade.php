@@ -1,164 +1,176 @@
-<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+<nav x-data="{ open: false, profileOpen: false }" class="relative z-50">
     @php
         $user = auth()->user();
         $role = $user?->role;
+        $verified = $user?->email_verified_at;
 
-        $menuItems = [
-            ['label' => 'Dashboard', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
-            ['label' => 'Daftar Proyek', 'href' => route('proyek.index'), 'active' => request()->routeIs('proyek.index') || request()->routeIs('proyek.show')],
-        ];
+        $menuItems = [];
 
         if ($role === 'client') {
             $menuItems = [
-                ['label' => 'Dashboard', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
+                ['label' => 'Beranda', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
                 ['label' => 'Daftar Proyek', 'href' => route('proyek.index'), 'active' => request()->routeIs('proyek.index') || request()->routeIs('proyek.show')],
                 ['label' => 'Proyek Saya', 'href' => route('proyek.my'), 'active' => request()->routeIs('proyek.my') || request()->routeIs('proyek.create')],
                 ['label' => 'Lihat Proposal', 'href' => route('proposal.index'), 'active' => request()->routeIs('proposal.index') || request()->routeIs('proposal.show')],
+                ['label' => 'Buat Proyek', 'href' => route('proyek.create'), 'active' => request()->routeIs('proyek.create')],
             ];
-            $menuItems[] = ['label' => 'Buat Proyek', 'href' => route('proyek.create'), 'active' => request()->routeIs('proyek.create')];
-        }
-
-        if ($role === 'arsitek') {
-            $menuItems[] = ['label' => 'Proyek Saya', 'href' => route('arsitek.proyek'), 'active' => request()->routeIs('arsitek.proyek')];
-            $menuItems[] = ['label' => 'Daftar Proposal', 'href' => route('proposal.index'), 'active' => request()->routeIs('proposal.index') || request()->routeIs('proposal.show') || request()->routeIs('proposal.create')];
-            $menuItems[] = ['label' => 'Portofolio Saya', 'href' => route('portofolio.index'), 'active' => request()->routeIs('portofolio.index') || request()->routeIs('portofolio.create') || request()->routeIs('portofolio.edit')];
-            $menuItems[] = ['label' => 'Edit Profil', 'href' => route('arsitek.profile.edit'), 'active' => request()->routeIs('arsitek.profile.edit')];
-        }
-
-        if ($role === 'admin') {
-            $menuItems[] = ['label' => 'Panel Admin', 'href' => url('/admin'), 'active' => request()->is('admin') || request()->is('admin/*')];
+        } elseif ($role === 'arsitek') {
+            $menuItems = [
+                ['label' => 'Beranda', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
+                ['label' => 'Proyek Saya', 'href' => route('arsitek.proyek'), 'active' => request()->routeIs('arsitek.proyek')],
+                ['label' => 'Daftar Proposal', 'href' => route('proposal.index'), 'active' => request()->routeIs('proposal.index') || request()->routeIs('proposal.show') || request()->routeIs('proposal.create')],
+                ['label' => 'Portofolio Saya', 'href' => route('portofolio.index'), 'active' => request()->routeIs('portofolio.index') || request()->routeIs('portofolio.create') || request()->routeIs('portofolio.edit')],
+                ['label' => 'Edit Profil', 'href' => route('arsitek.profile.edit'), 'active' => request()->routeIs('arsitek.profile.edit')],
+            ];
+        } elseif ($role === 'admin') {
+            $menuItems = [
+                ['label' => 'Panel Admin', 'href' => url('/admin'), 'active' => request()->is('admin') || request()->is('admin/*')],
+            ];
         }
     @endphp
 
-    <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                    </a>
-                </div>
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex h-[72px] items-center justify-between rounded-full bg-stone-800 px-5 shadow-[0_22px_55px_-30px_rgba(15,23,42,0.12)] ring-1 ring-slate-200/70 transition duration-300">
+            <div class="flex items-center gap-5">
+                <a href="{{ route('dashboard') }}" class="text-white font-semibold uppercase tracking-[0.28em] text-sm">ARCHITECTS</a>
+            </div>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-6 sm:-my-px sm:ms-10 sm:flex">
+            <div class="hidden xl:flex items-center gap-2">
+                <div class="inline-flex items-center gap-2 rounded-full bg-white px-2 py-1 shadow-sm ring-1 ring-white">
                     @foreach ($menuItems as $item)
-                        <x-nav-link :href="$item['href']" :active="$item['active']">
-                            {{ __($item['label']) }}
-                        </x-nav-link>
+                        <a href="{{ $item['href'] }}" class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition duration-200 ease-out {{ $item['active'] ? 'bg-white text-slate-950 shadow-lg shadow-slate-950/10' : 'bg-white text-slate-950 hover:bg-amber-700 hover:text-white' }}">
+                            @if ($item['label'] === 'Beranda')
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9.75L12 3l9 6.75M4.5 10.5v9.75a.75.75 0 00.75.75h3.75a.75.75 0 00.75-.75v-4.5h3v4.5a.75.75 0 00.75.75h3.75a.75.75 0 00.75-.75V10.5" />
+                                </svg>
+                            @elseif ($item['label'] === 'Daftar Proyek')
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7.5A2.25 2.25 0 015.25 5.25h3.75l1.5 1.5h8.25A2.25 2.25 0 0121 9v9.75A2.25 2.25 0 0118.75 21H5.25A2.25 2.25 0 013 18.75V7.5z" />
+                                </svg>
+                            @elseif ($item['label'] === 'Proyek Saya')
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6.75 9V7.5A2.25 2.25 0 019 5.25h6A2.25 2.25 0 0117.25 7.5V9M4.5 9h15.75M4.5 9v9.75A2.25 2.25 0 006.75 21h10.5a2.25 2.25 0 002.25-2.25V9" />
+                                </svg>
+                            @elseif ($item['label'] === 'Lihat Proposal')
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.5 3h9A2.25 2.25 0 0118.75 5.25v13.5A2.25 2.25 0 0116.5 21h-9A2.25 2.25 0 015.25 18.75V5.25A2.25 2.25 0 017.5 3z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9h6M9 13h4.5M9 17h6" />
+                                </svg>
+                            @else
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.5v15M4.5 12h15" />
+                                </svg>
+                            @endif
+                            <span>{{ __($item['label']) }}</span>
+                        </a>
                     @endforeach
                 </div>
             </div>
 
-            <!-- Settings Dropdown -->
-            @auth
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                            <div class="flex items-center gap-2">
-                                <span>{{ Auth::user()->name }}</span>
-                                <span class="text-[10px] px-2 py-1 rounded-full {{ Auth::user()->email_verified_at ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }}">
-                                    {{ Auth::user()->email_verified_at ? 'Terverifikasi' : 'Belum Terverifikasi' }}
-                                </span>
-                            </div>
+            <div class="hidden lg:flex items-center gap-3">
+                <button type="button" class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-slate-950 shadow-sm shadow-slate-950/10 transition duration-200 hover:bg-slate-100">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" />
+                    </svg>
+                </button>
+                <button type="button" class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-slate-950 shadow-sm shadow-slate-950/10 transition duration-200 hover:bg-slate-100">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                </button>
+                <button type="button" class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-slate-950 shadow-sm shadow-slate-950/10 transition duration-200 hover:bg-slate-100">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16h8M8 12h6M8 8h8m-5 10a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                </button>
 
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
+                <div class="relative">
+                    <button @click="profileOpen = ! profileOpen" @click.away="profileOpen = false" class="inline-flex items-center gap-3 rounded-full border border-white bg-white px-2.5 py-2 text-sm font-medium text-slate-950 shadow-sm shadow-slate-950/10 transition duration-200 hover:bg-slate-100">
+                        <span class="inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white">
+                            @auth
+                                <img src="{{ Auth::user()->profile_photo_url ?? asset('images/default-avatar.png') }}" alt="{{ Auth::user()->name }}" class="h-full w-full object-cover" />
+                            @else
+                                <span class="text-sm font-semibold text-slate-700">U</span>
+                            @endauth
+                        </span>
+                        <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
 
-                    <x-slot name="content">
-                        <div class="px-4 py-2 text-xs text-gray-500 border-b border-gray-200 dark:border-gray-600">
-                            Status akun: <span class="font-semibold {{ Auth::user()->email_verified_at ? 'text-emerald-600' : 'text-amber-600' }}">{{ Auth::user()->email_verified_at ? 'Terverifikasi' : 'Belum diverifikasi' }}</span>
-                        </div>
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
-
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
+                    <div x-show="profileOpen" x-transition.opacity class="absolute right-0 z-50 mt-2 w-52 origin-top-right rounded-2xl border border-slate-800/60 bg-slate-950 p-2 shadow-xl ring-1 ring-slate-800/70">
+                        <a href="{{ route('profile.edit') }}" class="block rounded-2xl px-4 py-2 text-sm text-slate-100 transition hover:bg-slate-900">Kelola Profil</a>
+                        <form method="POST" action="{{ route('logout') }}" class="mt-1">
                             @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
+                            <button type="submit" class="w-full rounded-2xl px-4 py-2 text-left text-sm text-slate-100 transition hover:bg-slate-900">Logout</button>
                         </form>
-                    </x-slot>
-                </x-dropdown>
-            </div>
-            @else
-            <div class="hidden sm:flex sm:items-center sm:ms-6 space-x-4">
-                <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-200">{{ __('Log in') }}</a>
-                @if (Route::has('register'))
-                    <a href="{{ route('register') }}" class="text-sm text-gray-700 dark:text-gray-200">{{ __('Register') }}</a>
-                @endif
-            </div>
-            @endauth
+                    </div>
+                </div>
 
-            <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                <button @click="open = !open" class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white text-slate-950 shadow-sm shadow-slate-950/10 transition duration-200 hover:bg-slate-100 lg:hidden">
+                    <svg x-show="!open" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <svg x-show="open" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
         </div>
     </div>
 
-        <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            @foreach ($menuItems as $item)
-                <x-responsive-nav-link :href="$item['href']" :active="$item['active']">
-                    {{ __($item['label']) }}
-                </x-responsive-nav-link>
-            @endforeach
-        </div>
+    <div x-show="open" x-transition class="mt-3 lg:hidden">
+        <div class="rounded-[32px] bg-slate-950 px-4 py-4 shadow-lg shadow-slate-950/20 ring-1 ring-slate-800/70">
+            <div class="space-y-2">
+                @foreach ($menuItems as $item)
+                    <a href="{{ $item['href'] }}" class="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition duration-200 {{ $item['active'] ? 'bg-white text-slate-950' : 'bg-slate-950 text-white hover:bg-indigo-950 hover:text-white' }}">
+                        @if ($item['label'] === 'Beranda')
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9.75L12 3l9 6.75M4.5 10.5v9.75a.75.75 0 00.75.75h3.75a.75.75 0 00.75-.75v-4.5h3v4.5a.75.75 0 00.75.75h3.75a.75.75 0 00.75-.75V10.5" />
+                            </svg>
+                        @elseif ($item['label'] === 'Daftar Proyek')
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7.5A2.25 2.25 0 015.25 5.25h3.75l1.5 1.5h8.25A2.25 2.25 0 0121 9v9.75A2.25 2.25 0 0118.75 21H5.25A2.25 2.25 0 013 18.75V7.5z" />
+                            </svg>
+                        @elseif ($item['label'] === 'Proyek Saya')
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6.75 9V7.5A2.25 2.25 0 019 5.25h6A2.25 2.25 0 0117.25 7.5V9M4.5 9h15.75M4.5 9v9.75A2.25 2.25 0 006.75 21h10.5a2.25 2.25 0 002.25-2.25V9" />
+                            </svg>
+                        @elseif ($item['label'] === 'Lihat Proposal')
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.5 3h9A2.25 2.25 0 0118.75 5.25v13.5A2.25 2.25 0 0116.5 21h-9A2.25 2.25 0 015.25 18.75V5.25A2.25 2.25 0 017.5 3z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9h6M9 13h4.5M9 17h6" />
+                            </svg>
+                        @else
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.5v15M4.5 12h15" />
+                            </svg>
+                        @endif
+                        <span>{{ __($item['label']) }}</span>
+                    </a>
+                @endforeach
+            </div>
 
-        <!-- Responsive Settings Options -->
-        @auth
-        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-                <div class="mt-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold {{ Auth::user()->email_verified_at ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }}">
-                    {{ Auth::user()->email_verified_at ? 'Akun terverifikasi' : 'Akun belum diverifikasi' }}
+            @auth
+                <div class="mt-4 border-t border-slate-800 pt-4">
+                    <div class="flex items-center gap-3">
+                        <span class="inline-flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-slate-800">
+                            <img src="{{ Auth::user()->profile_photo_url ?? asset('images/default-avatar.png') }}" alt="{{ Auth::user()->name }}" class="h-full w-full object-cover" />
+                        </span>
+                        <div>
+                            <p class="text-sm font-semibold text-white">{{ Auth::user()->name }}</p>
+                            <p class="text-xs text-slate-400">Client</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 space-y-2">
+                        <a href="{{ route('profile.edit') }}" class="block rounded-2xl bg-slate-900 px-4 py-3 text-sm text-white transition hover:bg-slate-800">Kelola Profil</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="w-full rounded-2xl bg-slate-900 px-4 py-3 text-left text-sm text-white transition hover:bg-slate-800">Logout</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
-
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </form>
-            </div>
+            @endauth
         </div>
-        @else
-        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600 px-4">
-            <a href="{{ route('login') }}" class="block text-sm text-gray-700 dark:text-gray-200">{{ __('Log in') }}</a>
-            @if (Route::has('register'))
-                <a href="{{ route('register') }}" class="mt-2 block text-sm text-gray-700 dark:text-gray-200">{{ __('Register') }}</a>
-            @endif
-        </div>
-        @endauth
     </div>
 </nav>
