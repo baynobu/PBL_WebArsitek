@@ -33,7 +33,7 @@
                 <div class="max-w-2xl space-y-4">
                     <div class="flex items-center gap-2">
                         <span class="h-1.5 w-1.5 rounded-full bg-amber-600"></span>
-                        <p class="uppercase tracking-[0.28em] text-xs font-semibold text-slate-400">Proposal Center</p>
+                        <p class="uppercase tracking-[0.28em] text-xs font-semibold text-slate-400">Manajemen Proposal</p>
                     </div>
                     <div class="space-y-3">
                         <h1 class="text-3xl font-bold text-slate-950">Daftar Proposal</h1>
@@ -115,7 +115,6 @@
                                                             <p class="text-[11px] uppercase tracking-[0.26em] font-semibold text-slate-400">Arsitek</p>
                                                             <p class="text-base font-bold text-slate-950">{{ $architectName }}</p>
                                                         </div>
-                                                        <span class="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.15em] text-emerald-700">Verified Arsitek</span>
                                                     </div>
 
                                                     {{-- Note --}}

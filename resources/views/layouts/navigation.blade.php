@@ -20,15 +20,15 @@
             $menuItems = [
                 ['label' => 'Beranda', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
                 ['label' => 'Daftar Proyek', 'href' => route('proyek.index'), 'active' => request()->routeIs('proyek.index') || (request()->routeIs('proyek.show') && !$isCurrentProjectOwner)],
-                ['label' => 'Proyek Saya', 'href' => route('proyek.my'), 'active' => request()->routeIs('proyek.my') || request()->routeIs('proyek.create') || $isCurrentProjectOwner],
+                ['label' => 'Proyek Saya', 'href' => route('proyek.my'), 'active' => request()->routeIs('proyek.my') || $isCurrentProjectOwner],
                 ['label' => 'Lihat Proposal', 'href' => route('proposal.index'), 'active' => request()->routeIs('proposal.index') || request()->routeIs('proposal.show')],
                 ['label' => 'Buat Proyek', 'href' => route('proyek.create'), 'active' => request()->routeIs('proyek.create')],
             ];
         } elseif ($role === 'arsitek') {
             $menuItems = [
                 ['label' => 'Beranda', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
-                ['label' => 'Proyek Saya', 'href' => route('arsitek.proyek'), 'active' => request()->routeIs('arsitek.proyek')],
                 ['label' => 'Daftar Proposal', 'href' => route('proposal.index'), 'active' => request()->routeIs('proposal.index') || request()->routeIs('proposal.show') || request()->routeIs('proposal.create')],
+                ['label' => 'Proyek Saya', 'href' => route('arsitek.proyek'), 'active' => request()->routeIs('arsitek.proyek')],
                 ['label' => 'Portofolio Saya', 'href' => route('portofolio.index'), 'active' => request()->routeIs('portofolio.index') || request()->routeIs('portofolio.create') || request()->routeIs('portofolio.edit')],
                 ['label' => 'Edit Profil', 'href' => route('arsitek.profile.edit'), 'active' => request()->routeIs('arsitek.profile.edit')],
             ];

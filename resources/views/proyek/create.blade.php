@@ -9,7 +9,7 @@
             <div class="max-w-2xl space-y-4">
                 <div class="flex items-center gap-2">
                     <span class="h-1.5 w-1.5 rounded-full bg-amber-600"></span>
-                    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Client Workspace</p>
+                    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Ruang Kerja Klien</p>
                 </div>
                 <div class="space-y-3">
                     <h1 class="text-3xl font-bold text-slate-950">Posting Proyek Baru</h1>
@@ -47,7 +47,7 @@
                         {{-- Budget & Deadline --}}
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <div>
-                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-600">Budget</label>
+                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-600">Anggaran</label>
                                 <div class="relative">
                                     <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-400">Rp</span>
                                     <input type="number" name="budget" value="{{ old('budget') }}" min="0" step="0.01"
@@ -57,7 +57,7 @@
                                 @error('budget')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
                             </div>
                             <div>
-                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-600">Deadline</label>
+                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-600">Batas Waktu</label>
                                 <input type="date" name="deadline" value="{{ old('deadline') }}"
                                     class="w-full rounded-[14px] border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-100">
                                 @error('deadline')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
@@ -67,7 +67,7 @@
                         {{-- Durasi & Lokasi --}}
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <div>
-                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-600">Durasi Open Project</label>
+                                <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-600">Durasi Buka Projek</label>
                                 <div class="relative">
                                     <input type="number" name="open_duration_days" value="{{ old('open_duration_days', 14) }}" min="3" max="90"
                                         class="w-full rounded-[14px] border border-slate-200 bg-white py-3 pl-4 pr-14 text-sm font-medium text-slate-900 focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-100">

@@ -10,7 +10,7 @@
                 <div class="max-w-2xl space-y-4">
                     <div class="flex items-center gap-2">
                         <span class="h-1.5 w-1.5 rounded-full bg-amber-600"></span>
-                        <p class="uppercase tracking-[0.28em] text-xs font-semibold text-slate-400">Client Workspace</p>
+                        <p class="uppercase tracking-[0.28em] text-xs font-semibold text-slate-400">Ruang Kerja Klien</p>
                     </div>
                     <div class="space-y-3">
                         <h1 class="text-3xl font-bold text-slate-950">Proyek Saya</h1>
@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="flex justify-start lg:justify-end">
-                    <a href="{{ route('proyek.create') }}" class="inline-flex items-center rounded-2xl bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-950/20 transition duration-200 hover:bg-slate-800">+ Buat Proyek Baru</a>
+                    <a href="{{ route('proyek.create') }}" class="inline-flex items-center rounded-2xl bg-stone-800 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-950/20 transition duration-200 hover:bg-stone-900">+ Buat Proyek Baru</a>
                 </div>
             </div>
         </div>
@@ -80,7 +80,7 @@
                                                     </div>
                                                     <div class="flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-500">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                                                        <span>Deadline {{ $proyek->deadline }}</span>
+                                                        <span>Batas Waktu {{ $proyek->deadline }}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -92,7 +92,7 @@
                                                 <div class="rounded-[22px] bg-slate-50 p-4">
                                                     <div class="flex items-center gap-1.5 mb-3">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                                                        <p class="text-xs uppercase tracking-[0.22em] font-semibold text-emerald-600">Budget</p>
+                                                        <p class="text-xs uppercase tracking-[0.22em] font-semibold text-emerald-600">Anggaran</p>
                                                     </div>
                                                     <p class="text-base font-bold text-emerald-900">Rp {{ number_format($proyek->budget, 0, ',', '.') }}</p>
                                                 </div>

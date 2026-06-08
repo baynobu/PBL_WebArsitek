@@ -109,7 +109,7 @@
                     </div>
                     <div class="grid gap-3 sm:grid-cols-3">
                         <div class="rounded-[22px] bg-slate-50 p-4">
-                            <p class="text-xs uppercase tracking-[0.2em] text-slate-400">Email</p>
+                            <p class="text-xs uppercase tracking-[0.2em] text-slate-400">Po-sel</p>
                             <p class="mt-2 text-sm font-semibold text-slate-950">{{ $proyek->client->email ?? '-' }}</p>
                         </div>
                         <div class="rounded-[22px] bg-slate-50 p-4">
@@ -141,7 +141,7 @@
                             <p class="mt-2 text-sm font-semibold text-indigo-900">{{ $proyek->lokasi ?? 'Malang' }}</p>
                         </div>
                         <div class="rounded-[22px] bg-slate-50 p-4">
-                            <p class="text-xs uppercase tracking-[0.2em] text-emerald-500">Budget</p>
+                            <p class="text-xs uppercase tracking-[0.2em] text-emerald-500">Anggaran</p>
                             <p class="mt-2 text-sm font-semibold text-emerald-900">Rp {{ number_format($proyek->budget ?? 0, 0, ',', '.') }}</p>
                         </div>
                         <div class="rounded-[22px] bg-slate-50 p-4">
@@ -159,12 +159,18 @@
                         </div>
                     </div>
 
-                    @if($isClientOwner && $proyek->status !== 'done')
-                        <form method="post" action="{{ route('proyek.updateStatus', $proyek) }}" class="mt-5">
-                            @csrf @method('PATCH')
-                            <input type="hidden" name="status" value="done">
-                            <button type="submit" class="w-full rounded-2xl bg-amber-700 py-3.5 text-sm font-semibold text-white shadow-md shadow-amber-700/20 transition hover:bg-amber-800">Selesaikan Proyek</button>
-                        </form>
+                    @if($isClientOwner)
+                        @if($proyek->status !== 'done')
+                            <form method="post" action="{{ route('proyek.updateStatus', $proyek) }}" class="mt-5">
+                                @csrf @method('PATCH')
+                                <input type="hidden" name="status" value="done">
+                                <button type="submit" class="w-full rounded-2xl bg-amber-700 py-3.5 text-sm font-semibold text-white shadow-md shadow-amber-700/20 transition hover:bg-amber-800">Selesaikan Proyek</button>
+                            </form>
+                        @elseif(! $proyek->rating()->exists())
+                            <a href="{{ route('rating.create', $proyek) }}" class="mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-amber-700 py-3.5 text-sm font-semibold text-white shadow-md shadow-amber-700/20 transition hover:bg-amber-800">Beri Penilaian</a>
+                        @else
+                            <div class="mt-5 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700">Rating arsitek sudah dikirim.</div>
+                        @endif
                     @endif
                 </div>
 
@@ -173,9 +179,9 @@
                     <div class="flex items-start justify-between mb-2">
                         <div class="flex items-center gap-2">
                             <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
-                            <p class="text-base font-bold uppercase tracking-[0.14em] text-slate-950">Manajement Tugas</p>
+                            <p class="text-base font-bold uppercase tracking-[0.14em] text-slate-950">Manajemen Tugas</p>
                         </div>
-                        @if($isClientOwner)
+                        @if($isClientOwner && $proyek->status !== 'done')
                             <button type="button" @click="openAddTask = !openAddTask" class="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50">+ Tambah</button>
                         @endif
                     </div>

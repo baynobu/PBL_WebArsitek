@@ -147,7 +147,7 @@ class ProyekController extends Controller
             }
 
             $proyek->update(['status' => 'done']);
-            return redirect()->route('proyek.show', $proyek)->with('success', 'Proyek berhasil ditandai selesai.');
+            return redirect()->route('rating.create', $proyek)->with('success', 'Proyek berhasil ditandai selesai. Silakan beri rating arsitek.');
         }
 
         return redirect()->route('proyek.show', $proyek)->with('error', 'Tidak bisa ubah status pada tahap ini.');
@@ -175,6 +175,10 @@ class ProyekController extends Controller
     public function storeTask(Request $request, Proyek $proyek)
     {
         $this->ensureClientOwnsProject($proyek);
+
+        if ($proyek->status === 'done') {
+            return redirect()->route('proyek.show', $proyek)->with('error', 'Proyek selesai tidak dapat menambah tugas lagi.');
+        }
 
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],

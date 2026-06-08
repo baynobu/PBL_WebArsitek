@@ -1,41 +1,65 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-10">
-    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-6">
-        <a href="{{ route('proyek.show', $proyek) }}" class="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-700">&larr; Kembali ke proyek</a>
+<div class="py-10 bg-slate-50">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-8">
 
-        <div class="rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-6 text-white shadow-lg">
-            <p class="text-xs uppercase tracking-[0.2em] text-indigo-100">Client Feedback</p>
-            <h1 class="mt-2 text-3xl font-bold">Beri Rating</h1>
-            <p class="mt-2 text-sm text-indigo-100">Proyek: {{ $proyek->judul }}</p>
-        </div>
-
-        <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700">
-            <form action="{{ route('rating.store', $proyek) }}" method="post" class="space-y-5">
-                @csrf
-
-                <div>
-                    <label class="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-200">Nilai (1-5)</label>
-                    <select name="nilai" class="w-full rounded-lg border-gray-300 bg-gray-50 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100">
-                        @for($i=5;$i>=1;$i--)
-                            <option value="{{ $i }}">{{ $i }}</option>
-                        @endfor
-                    </select>
-                    @error('nilai') <div class="mt-1 text-sm text-red-600">{{ $message }}</div> @enderror
+        {{-- Header --}}
+        <section class="rounded-[32px] border border-slate-100 bg-white p-8 shadow-[0_40px_80px_rgba(15,23,42,0.08)]">
+            <div class="max-w-2xl space-y-4">
+                <div class="flex items-center gap-2">
+                    <span class="h-1.5 w-1.5 rounded-full bg-amber-600"></span>
+                    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Ulasan Klien</p>
                 </div>
-
-                <div>
-                    <label class="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-200">Komentar (opsional)</label>
-                    <textarea name="komentar" rows="5" class="w-full rounded-lg border-gray-300 bg-gray-50 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100">{{ old('komentar') }}</textarea>
-                    @error('komentar') <div class="mt-1 text-sm text-red-600">{{ $message }}</div> @enderror
+                <div class="space-y-3">
+                    <h1 class="text-3xl font-bold text-slate-950">Beri Penilaian</h1>
+                    <p class="max-w-xl text-sm leading-7 text-slate-500">Proyek: {{ $proyek->judul }}</p>
                 </div>
+            </div>
+        </section>
 
-                <div class="flex justify-end border-t border-gray-200 pt-5 dark:border-gray-700">
-                    <button class="inline-flex items-center rounded-lg bg-indigo-600 px-5 py-3 text-sm font-semibold text-white hover:bg-indigo-700">Kirim Rating</button>
+        {{-- Form --}}
+        <article class="rounded-[28px] border border-slate-100 bg-white shadow-sm overflow-hidden">
+            <div class="flex">
+                <div class="w-1 shrink-0 bg-stone-800 rounded-l-[28px]"></div>
+                <div class="flex-1 p-8">
+                    <form action="{{ route('rating.store', $proyek) }}" method="post" class="space-y-6">
+                        @csrf
+
+                        {{-- Nilai --}}
+                        <div>
+                            <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-600">Nilai (1–5)</label>
+                            <select name="nilai"
+                                class="w-full rounded-[14px] border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-100">
+                                @for($i = 5; $i >= 1; $i--)
+                                    <option value="{{ $i }}">{{ $i }}</option>
+                                @endfor
+                            </select>
+                            @error('nilai')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
+                        </div>
+
+                        {{-- Komentar --}}
+                        <div>
+                            <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-slate-600">Komentar <span class="normal-case tracking-normal font-normal text-slate-400">(opsional)</span></label>
+                            <textarea name="komentar" rows="5"
+                                placeholder="Ceritakan pengalaman Anda bekerja sama dengan arsitek ini..."
+                                class="w-full rounded-[14px] border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 placeholder-slate-300 focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-100">{{ old('komentar') }}</textarea>
+                            @error('komentar')<p class="mt-1.5 text-xs text-red-500">{{ $message }}</p>@enderror
+                        </div>
+
+                        {{-- Actions --}}
+                        <div class="flex items-center justify-between border-t border-slate-100 pt-6">
+                            <a href="{{ route('proyek.show', $proyek) }}" class="text-sm font-medium text-slate-400 transition hover:text-slate-600">← Kembali</a>
+                            <button type="submit" class="inline-flex items-center rounded-2xl bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-950/20 transition duration-200 hover:bg-slate-800">
+                                Kirim Penilaian
+                            </button>
+                        </div>
+
+                    </form>
                 </div>
-            </form>
-        </div>
+            </div>
+        </article>
+
     </div>
 </div>
 @endsection
