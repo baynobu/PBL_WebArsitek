@@ -1,552 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>PBL Arsitek - Marketplace Lowongan Kerja Arsitek Berbasis Proyek</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Architects Studio</title>
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=alatsi:400&family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        * {
-            @apply transition-all duration-300;
+        .architect-title {
+            font-family: 'Alatsi', sans-serif;
+            letter-spacing: 0.15em;
         }
 
-        .gradient-primary {
-            @apply bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600;
+        .soft-shadow {
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.08);
         }
 
-        .gradient-text {
-            @apply bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent;
+        .section-title {
+            font-family: 'Alatsi', sans-serif;
+            letter-spacing: 0.08em;
         }
 
-        .card-hover {
-            @apply hover:-translate-y-2 hover:shadow-2xl;
+        .snap-track {
+            scroll-snap-type: x mandatory;
         }
 
-        .btn-primary {
-            @apply px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:shadow-lg hover:from-blue-700 hover:to-indigo-700;
+        .snap-card {
+            scroll-snap-align: start;
         }
 
-        .btn-secondary {
-            @apply px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-blue-600;
+        .hide-scrollbar {
+            scrollbar-width: none;
         }
 
-        .floating {
-            animation: floating 3s ease-in-out infinite;
-        }
-
-        @keyframes floating {
-
-            0%,
-            100% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-20px);
-            }
-        }
-
-        .navbar-blur {
-            @apply backdrop-blur-md bg-white/30;
-        }
-
-        .feature-icon {
-            @apply w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-2xl;
-        }
-
-        .role-card {
-            @apply p-10 rounded-2xl bg-gradient-to-br border-2 transition-all hover:scale-105;
-        }
-
-        .role-card.arsitek {
-            @apply from-blue-50 to-indigo-50 border-blue-200 hover:border-blue-500;
-        }
-
-        .role-card.client {
-            @apply from-purple-50 to-pink-50 border-purple-200 hover:border-purple-500;
-        }
-
-        .feature-box {
-            @apply p-8 rounded-2xl bg-white border border-gray-200 hover:border-blue-400 card-hover;
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
         }
     </style>
 </head>
-
-<body class="bg-white text-gray-900 overflow-x-hidden">
+<body class="bg-white text-[#000000] antialiased font-[Inter] overflow-x-hidden">
     @php
-        $heroBadge = data_get($landingContents ?? [], 'hero.badge.value', '🏗️ Marketplace Lowongan Kerja Arsitek Profesional');
-        $heroTitlePartOne = data_get($landingContents ?? [], 'hero.title_part_1.value', 'Hubungkan Ide');
-        $heroTitlePartTwo = data_get($landingContents ?? [], 'hero.title_part_2.value', 'Dengan Talenta Arsitek');
-        $heroSubtitle = data_get($landingContents ?? [], 'hero.subtitle.value', 'Platform terpercaya untuk menemukan, merekrut, dan berkolaborasi dengan arsitek profesional berbasis proyek kontrak dan freelance.');
-        $heroPrimaryCta = data_get($landingContents ?? [], 'hero.primary_cta.value', 'Mulai Sekarang');
-        $heroSecondaryCta = data_get($landingContents ?? [], 'hero.secondary_cta.value', 'Login');
-        $projectsCount = data_get($landingContents ?? [], 'stats.projects_count.value', '100+ Lowongan Proyek');
-        $architectCount = data_get($landingContents ?? [], 'stats.architect_count.value', '250+ Arsitek Profesional');
-        $ratingScore = data_get($landingContents ?? [], 'stats.rating_score.value', '4.8/5 Rating');
+        $navLabel = data_get($landingContents ?? [], 'navbar.brand.value', 'ARCHTCS.');
+        $navCta = data_get($landingContents ?? [], 'navbar.cta.value', 'GET IN TOUCH');
+
+        $heroEyebrow = data_get($landingContents ?? [], 'hero.eyebrow.value', 'Architects Studio');
+        $heroHeadline = data_get($landingContents ?? [], 'hero.headline.value', 'ARCHITECTS');
+        $heroImage = data_get($landingContents ?? [], 'hero.image.value', 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=80');
+
+        $featureStrip = [
+            ['label' => 'Architects Studio', 'href' => '#featured-projects'],
+            ['label' => 'Your Next Architecture Journey Starts Here', 'href' => '#hero-content'],
+            ['label' => 'Featured Works', 'href' => '#featured-projects'],
+            ['label' => 'About', 'href' => '#about'],
+        ];
+
+        $contentIntroTitle = data_get($landingContents ?? [], 'intro.title.value', 'WHERE THE ARCHITECTS GET DISCOVERED');
+        $contentIntroEyebrow = data_get($landingContents ?? [], 'intro.eyebrow.value', 'OFFICIAL WEBSITE OF ARCHITECTS STUDIO');
+        $contentIntroText = data_get($landingContents ?? [], 'intro.text.value', 'Connect with top architecture firms, creative studios, and construction companies through one modern platform built for architects and design professionals. Whether you are a fresh graduate, freelance designer, or experienced architect, our platform helps you discover opportunities that match your creativity, skills, and ambitions. We make recruitment faster, smarter, and more connected for the architecture industry.');
+        $contentIntroImage = data_get($landingContents ?? [], 'intro.image.value', 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=80');
+
+        $contentProfileTitle = data_get($landingContents ?? [], 'profile.title.value', 'DISCOVER OUR COMPANY PROFILE');
+        $contentProfileEyebrow = data_get($landingContents ?? [], 'profile.eyebrow.value', 'OFFICIAL WEBSITE OF ARCHITECTS STUDIO');
+        $contentProfileText = data_get($landingContents ?? [], 'profile.text.value', 'Architects is a modern architectural platform dedicated to connecting visionary architects with innovative projects. We create spaces that combine aesthetics, functionality, and timeless design to shape better living experiences. Architects Studio delivers contemporary architectural solutions through thoughtful design, clean aesthetics, and innovative spatial experiences. We believe architecture should inspire people and elevate everyday life.');
+        $contentProfileImage = data_get($landingContents ?? [], 'profile.image.value', 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1400&q=80');
+
         $featureRole = data_get($landingContents ?? [], 'feature.account_role.value', 'Daftar sebagai Arsitek, Client, atau Admin. Verifikasi akun untuk keamanan maksimal.');
         $featureMarketplace = data_get($landingContents ?? [], 'feature.marketplace.value', 'Client posting lowongan dengan judul, deskripsi, budget, deadline, dan lokasi yang jelas.');
         $featureProposal = data_get($landingContents ?? [], 'feature.proposal_system.value', 'Arsitek submit proposal dengan harga, durasi, dan penawaran unik mereka untuk setiap proyek.');
+
+        $featureCards = [
+            ['icon' => '✦', 'title' => 'Manajemen Akun & Role', 'text' => $featureRole ?? 'Daftar sebagai Arsitek, Client, atau Admin. Verifikasi akun untuk keamanan maksimal.'],
+            ['icon' => '◫', 'title' => 'Marketplace Lowongan Proyek', 'text' => $featureMarketplace ?? 'Client posting lowongan dengan judul, deskripsi, budget, deadline, dan lokasi yang jelas.'],
+            ['icon' => '✉', 'title' => 'Sistem Proposal', 'text' => $featureProposal ?? 'Arsitek submit proposal dengan harga, durasi, dan penawaran unik mereka untuk setiap proyek.'],
+            ['icon' => '◌', 'title' => 'Profil & Portofolio Digital', 'text' => 'Arsitek showcase diri dengan foto, skill, pengalaman, dan gallery proyek-proyek terbaik mereka.'],
+            ['icon' => '◈', 'title' => 'Tracking Status Proyek', 'text' => 'Monitor progress proyek dari Open ke On Progress ke Completed dengan transparansi penuh.'],
+        ];
+
+        $projects = [
+            ['image' => 'https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1000&q=80', 'title' => 'Contemporary Residence'],
+            ['image' => 'https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1000&q=80', 'title' => 'Minimal Office Space'],
+            ['image' => 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1000&q=80', 'title' => 'Urban Lobby Concept'],
+            ['image' => 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1000&q=80', 'title' => 'Warm Interior Study'],
+            ['image' => 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1000&q=80', 'title' => 'Architects Studio'],
+        ];
     @endphp
 
-    <!-- Navbar -->
-    <nav class="sticky top-0 z-50 navbar-blur border-b border-white/20 shadow-sm">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-purple-600"></div>
-                <h1 class="text-2xl font-bold gradient-text">PBL Arsitek</h1>
-            </div>
+    <div class="min-h-screen bg-white">
+        <a href="#top" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-black focus:px-4 focus:py-2 focus:text-white">
+            Skip to content
+        </a>
 
-            <div class="flex gap-4 items-center">
-                @auth
-                    <div class="hidden md:flex items-center gap-3 mr-2">
-                        <span class="px-3 py-1 rounded-full text-xs font-semibold {{ auth()->user()->email_verified_at ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }}">
-                            {{ auth()->user()->email_verified_at ? 'Akun Terverifikasi' : 'Menunggu Verifikasi' }}
-                        </span>
-                        <span class="text-sm text-gray-600">{{ auth()->user()->name }}</span>
+        @include('partials.header')
+
+        <!-- Main Content -->
+        <main id="top" class="w-full">
+            <section class="px-5 py-12 sm:px-8 lg:px-12 xl:px-16 2xl:px-20">
+                <div class="mx-auto grid max-w-[1600px] gap-10 xl:grid-cols-[0.92fr_1.08fr] xl:items-center xl:gap-14">
+                    <div class="min-w-0 space-y-6 xl:pt-12">
+                        <p class="text-sm font-semibold tracking-[0.35em] text-[#3B3B3B] sm:text-base">{{ $heroEyebrow }}</p>
+                        <h1 class="architect-title max-w-[9ch] text-[clamp(3rem,7vw,7.5rem)] leading-[0.92] text-black lg:max-w-[9ch]">
+                            {{ $heroHeadline }}
+                        </h1>
                     </div>
-                    <a href="/dashboard" class="btn-primary">
-                        Dashboard
-                    </a>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="px-6 py-2 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-100">
-                            Logout
-                        </button>
-                    </form>
-                @else
-                    <a href="/login" class="px-6 py-2 text-gray-700 font-medium hover:text-blue-600">
-                        Login
-                    </a>
-                    <a href="/register" class="btn-primary">
-                        Register
-                    </a>
-                @endauth
-            </div>
-        </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center px-6 overflow-hidden">
-        <!-- Background Gradient -->
-        <div class="absolute inset-0 gradient-primary opacity-10 -z-10"></div>
-
-        <!-- Decorative Elements -->
-        <div
-            class="absolute top-20 left-10 w-72 h-72 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse">
-        </div>
-        <div
-            class="absolute bottom-10 right-10 w-72 h-72 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse">
-        </div>
-
-        <div class="relative max-w-4xl mx-auto text-center">
-            <div class="mb-8">
-                <span class="inline-block px-4 py-2 bg-blue-100 text-blue-600 rounded-full text-sm font-semibold mb-6">
-                    {{ $heroBadge }}
-                </span>
-            </div>
-
-            <h2 class="text-5xl md:text-6xl lg:text-7xl font-black mb-8 leading-tight">
-                <span class="gradient-text">{{ $heroTitlePartOne }}</span>
-                <br>
-                <span class="text-gray-900">{{ $heroTitlePartTwo }}</span>
-            </h2>
-
-            <p class="text-xl md:text-2xl text-gray-600 mb-12 leading-relaxed max-w-2xl mx-auto">
-                {{ $heroSubtitle }}
-            </p>
-
-            <div class="flex flex-col md:flex-row gap-6 justify-center items-center mt-12">
-                @auth
-                    <a href="/dashboard" class="btn-primary text-lg">
-                        {{ $heroPrimaryCta }} →
-                    </a>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="btn-secondary text-lg border-gray-300 text-gray-700 hover:text-blue-600 hover:border-blue-600">
-                            Logout
-                        </button>
-                    </form>
-                @else
-                    <a href="/register" class="btn-primary text-lg">
-                        {{ $heroPrimaryCta }} →
-                    </a>
-                    <a href="/login" class="btn-secondary text-lg">
-                        {{ $heroSecondaryCta }}
-                    </a>
-                @endauth
-            </div>
-
-            <!-- Social Proof -->
-            <div class="flex flex-wrap justify-center gap-8 mt-16 text-sm text-gray-600">
-                <div>📊 {{ $projectsCount }}</div>
-                <div>👥 {{ $architectCount }}</div>
-                <div>⭐ {{ $ratingScore }}</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- For Two Roles Section -->
-    <section class="py-24 px-6 bg-gradient-to-r from-gray-50 to-gray-100">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-bold mb-6">Untuk Siapa Saja Ini Cocok?</h2>
-                <p class="text-xl text-gray-600">Platform yang dirancang khusus untuk dua pihak berbeda dengan kebutuhan
-                    unik mereka</p>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-12">
-                <!-- Untuk Arsitek -->
-                <div class="role-card arsitek">
-                    <div class="text-5xl mb-6">🎨</div>
-                    <h3 class="text-3xl font-bold mb-6 text-blue-900">Untuk Arsitek</h3>
-                    <p class="text-gray-700 mb-8 text-lg font-semibold">Bangun Karir Impian Anda</p>
-
-                    <ul class="space-y-4 mb-8">
-                        <li class="flex items-start gap-3">
-                            <span class="text-blue-600 text-xl">✓</span>
-                            <span class="text-gray-700">Buat profil dan portofolio digital profesional</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="text-blue-600 text-xl">✓</span>
-                            <span class="text-gray-700">Temukan lowongan proyek sesuai skill Anda</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="text-blue-600 text-xl">✓</span>
-                            <span class="text-gray-700">Kirim proposal dan tawarkan keahlian Anda</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="text-blue-600 text-xl">✓</span>
-                            <span class="text-gray-700">Kelola status proyek dengan transparan</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="text-blue-600 text-xl">✓</span>
-                            <span class="text-gray-700">Dapatkan rating dan review dari client</span>
-                        </li>
-                    </ul>
-
-                    <div class="p-4 bg-blue-100 rounded-lg border-l-4 border-blue-600">
-                        <p class="text-sm text-blue-900"><strong>Fresh Graduate?</strong> Platform ini sempurna untuk
-                            membangun CV digital dan pengalaman kerja pertama Anda!</p>
-                    </div>
-                </div>
-
-                <!-- Untuk Client/Pemberi Kerja -->
-                <div class="role-card client">
-                    <div class="text-5xl mb-6">💼</div>
-                    <h3 class="text-3xl font-bold mb-6 text-purple-900">Untuk Client (Pemberi Kerja)</h3>
-                    <p class="text-gray-700 mb-8 text-lg font-semibold">Temukan Arsitek Terbaik Untuk Proyek Anda</p>
-
-                    <ul class="space-y-4 mb-8">
-                        <li class="flex items-start gap-3">
-                            <span class="text-purple-600 text-xl">✓</span>
-                            <span class="text-gray-700">Post lowongan proyek dengan detail yang jelas</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="text-purple-600 text-xl">✓</span>
-                            <span class="text-gray-700">Browse profil dan portofolio arsitek berkualitas</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="text-purple-600 text-xl">✓</span>
-                            <span class="text-gray-700">Terima dan bandingkan proposal dari berbagai arsitek</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="text-purple-600 text-xl">✓</span>
-                            <span class="text-gray-700">Pilih talenta terbaik sesuai budget dan kebutuhan</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="text-purple-600 text-xl">✓</span>
-                            <span class="text-gray-700">Track progress dan berikan rating setelah selesai</span>
-                        </li>
-                    </ul>
-
-                    <div class="p-4 bg-purple-100 rounded-lg border-l-4 border-purple-600">
-                        <p class="text-sm text-purple-900"><strong>Tips:</strong> Semakin detail deskripsi proyek Anda,
-                            semakin banyak proposal berkualitas yang diterima!</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="py-24 px-6">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-20">
-                <h3 class="text-4xl md:text-5xl font-bold mb-6">Fitur Utama Platform</h3>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                    Semua yang diperlukan untuk menghubungkan arsitek dengan peluang kerja terbaik
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Feature 1 -->
-                <div class="feature-box">
-                    <div class="text-5xl mb-4">📝</div>
-                    <h4 class="text-2xl font-bold mb-4 gradient-text">Manajemen Akun & Role</h4>
-                    <p class="text-gray-600 mb-4">
-                        {{ $featureRole }}
-                    </p>
-                    <ul class="text-sm text-gray-600 space-y-2">
-                        <li>✓ Registrasi mudah</li>
-                        <li>✓ Verifikasi admin</li>
-                        <li>✓ Role-based access</li>
-                    </ul>
-                </div>
-
-                <!-- Feature 2 -->
-                <div class="feature-box">
-                    <div class="text-5xl mb-4">🏢</div>
-                    <h4 class="text-2xl font-bold mb-4 gradient-text">Marketplace Lowongan Proyek</h4>
-                    <p class="text-gray-600 mb-4">
-                        {{ $featureMarketplace }}
-                    </p>
-                    <ul class="text-sm text-gray-600 space-y-2">
-                        <li>✓ Post lowongan mudah</li>
-                        <li>✓ Filter proyek fleksibel</li>
-                        <li>✓ Visibility tinggi</li>
-                    </ul>
-                </div>
-
-                <!-- Feature 3 -->
-                <div class="feature-box">
-                    <div class="text-5xl mb-4">💌</div>
-                    <h4 class="text-2xl font-bold mb-4 gradient-text">Sistem Proposal</h4>
-                    <p class="text-gray-600 mb-4">
-                        {{ $featureProposal }}
-                    </p>
-                    <ul class="text-sm text-gray-600 space-y-2">
-                        <li>✓ Submit proposal custom</li>
-                        <li>✓ Compare kandidat</li>
-                        <li>✓ Pilih yang terbaik</li>
-                    </ul>
-                </div>
-
-                <!-- Feature 4 -->
-                <div class="feature-box">
-                    <div class="text-5xl mb-4">👤</div>
-                    <h4 class="text-2xl font-bold mb-4 gradient-text">Profil & Portofolio Digital</h4>
-                    <p class="text-gray-600 mb-4">
-                        Arsitek showcase diri dengan foto, skill, pengalaman, dan gallery proyek-proyek terbaik mereka.
-                    </p>
-                    <ul class="text-sm text-gray-600 space-y-2">
-                        <li>✓ Profil profesional</li>
-                        <li>✓ Portfolio showcase</li>
-                        <li>✓ Rating & review</li>
-                    </ul>
-                </div>
-
-                <!-- Feature 5 -->
-                <div class="feature-box">
-                    <div class="text-5xl mb-4">📊</div>
-                    <h4 class="text-2xl font-bold mb-4 gradient-text">Tracking Status Proyek</h4>
-                    <p class="text-gray-600 mb-4">
-                        Monitor progress proyek dari Open → On Progress → Completed dengan transparansi penuh.
-                    </p>
-                    <ul class="text-sm text-gray-600 space-y-2">
-                        <li>✓ Real-time status</li>
-                        <li>✓ Transparent tracking</li>
-                        <li>✓ Completion confirmation</li>
-                    </ul>
-                </div>
-
-                <!-- Feature 6 -->
-                <div class="feature-box">
-                    <div class="text-5xl mb-4">⭐</div>
-                    <h4 class="text-2xl font-bold mb-4 gradient-text">Rating & Review System</h4>
-                    <p class="text-gray-600 mb-4">
-                        Client memberikan rating kepada arsitek sebagai indikator reputasi dan kualitas kerja mereka.
-                    </p>
-                    <ul class="text-sm text-gray-600 space-y-2">
-                        <li>✓ 5-star rating</li>
-                        <li>✓ Written reviews</li>
-                        <li>✓ Reputation score</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section class="py-24 px-6 bg-gray-50">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-bold mb-6">Bagaimana Cara Kerjanya?</h2>
-                <p class="text-xl text-gray-600">Alur sederhana yang menghubungkan client dan arsitek profesional</p>
-            </div>
-
-            <div class="grid md:grid-cols-4 gap-6 mb-16">
-                <!-- Step 1 -->
-                <div class="text-center">
-                    <div
-                        class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 text-white font-bold text-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                        1
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Post Lowongan</h3>
-                    <p class="text-gray-600 text-sm">
-                        Client membuat lowongan proyek dengan detail lengkap: judul, deskripsi, budget, deadline,
-                        lokasi.
-                    </p>
-                </div>
-
-                <!-- Arrow -->
-                <div class="hidden md:flex items-center justify-center">
-                    <div class="text-3xl text-gray-400">→</div>
-                </div>
-
-                <!-- Step 2 -->
-                <div class="text-center">
-                    <div
-                        class="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-600 to-purple-600 text-white font-bold text-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                        2
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Browse & Submit</h3>
-                    <p class="text-gray-600 text-sm">
-                        Arsitek melihat lowongan, mempelajari detail, lalu submit proposal dengan harga dan durasi
-                        mereka.
-                    </p>
-                </div>
-
-                <!-- Arrow -->
-                <div class="hidden md:flex items-center justify-center">
-                    <div class="text-3xl text-gray-400">→</div>
-                </div>
-
-                <!-- Step 3 -->
-                <div class="text-center">
-                    <div
-                        class="w-20 h-20 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 text-white font-bold text-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                        3
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Review & Select</h3>
-                    <p class="text-gray-600 text-sm">
-                        Client review proposal, lihat portofolio arsitek, bandingkan, dan pilih yang paling sesuai.
-                    </p>
-                </div>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-6">
-                <!-- Step 4 -->
-                <div class="bg-white p-8 rounded-2xl border-2 border-blue-200 hover:border-blue-500 card-hover">
-                    <div class="flex items-start gap-6">
-                        <div
-                            class="w-16 h-16 rounded-full bg-gradient-to-br from-pink-600 to-red-600 text-white font-bold text-xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                            4
+                    {{-- <div class="min-w-0 xl:pt-4">
+                        <div class="ml-auto w-full max-w-[820px] overflow-hidden rounded-[28px] bg-gray-100 soft-shadow aspect-[4/3] sm:aspect-[16/10] xl:aspect-[5/4]">
+                            <img src="{{ $heroImage }}" alt="Architects hero image" class="block h-full w-full object-cover object-center">
                         </div>
+                    </div>
+                </div> --}}
+            </section>
+
+            <section class="px-4 pb-16 sm:px-6 lg:px-12 lg:pb-24">
+                <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                    @foreach ($featureStrip as $index => $item)
+                        <a href="{{ $item['href'] }}" class="rounded-[24px] border border-black/10 bg-white px-5 py-4 text-center text-sm font-medium text-[#3B3B3B] soft-shadow transition hover:-translate-y-1 hover:border-black/20 hover:text-black sm:px-6 sm:py-5 sm:text-base">
+                            {{ $item['label'] }}
+                        </a>
+                    @endforeach
+                </div>
+            </section>
+
+            <section class="px-4 pb-16 sm:px-6 lg:px-12 lg:pb-24" id="about">
+                <div class="grid gap-8 lg:grid-cols-[1.15fr_0.95fr] lg:items-center">
+                    <div class="order-2 space-y-6 lg:order-1">
+                        <h2 class="section-title max-w-4xl text-[clamp(2.4rem,5vw,5.625rem)] leading-[1.02] text-black">
+                            {{ $contentIntroTitle }}
+                        </h2>
+                        <p class="max-w-3xl text-base leading-8 text-[#3B3B3B] sm:text-lg lg:text-[1.625rem] lg:leading-[1.45]">
+                            {{ $contentIntroText }}
+                        </p>
+                    </div>
+
+                    <div class="order-1 overflow-hidden rounded-[28px] soft-shadow lg:order-2">
+                        <img src="{{ $contentIntroImage }}" alt="Architecture studio image" class="h-[320px] w-full object-cover sm:h-[460px] lg:h-[720px]">
+                    </div>
+                </div>
+
+                <div class="mt-6 text-center lg:mt-8 lg:text-left">
+                    <p class="text-sm font-semibold tracking-[0.25em] text-[#3B3B3B] sm:text-base lg:text-[1.875rem]">
+                        {{ $contentIntroEyebrow }}
+                    </p>
+                </div>
+            </section>
+
+            <section class="px-4 pb-16 sm:px-6 lg:px-12 lg:pb-24">
+                <div class="grid gap-8 lg:grid-cols-[0.95fr_1.15fr] lg:items-center">
+                    <div class="overflow-hidden rounded-[28px] soft-shadow">
+                        <img src="{{ $contentProfileImage }}" alt="Company profile image" class="h-[320px] w-full object-cover sm:h-[460px] lg:h-[720px]">
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="text-right">
+                            <h2 class="section-title text-[clamp(2.4rem,5vw,5.625rem)] leading-[1.02] text-black">
+                                {{ $contentProfileTitle }}
+                            </h2>
+                        </div>
+                        <p class="text-base leading-8 text-[#3B3B3B] sm:text-lg lg:text-[1.625rem] lg:leading-[1.45]">
+                            {{ $contentProfileText }}
+                        </p>
+                        <p class="text-sm font-semibold tracking-[0.25em] text-[#3B3B3B] sm:text-base lg:text-[1.875rem]">
+                            {{ $contentProfileEyebrow }}
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="px-4 pb-16 sm:px-6 lg:px-12 lg:pb-24">
+                <div class="mb-8 flex items-end justify-between gap-4">
+                    <div>
+                        <p class="text-sm font-semibold tracking-[0.35em] text-[#3B3B3B] sm:text-base">FEATURES</p>
+                        <h2 class="section-title mt-3 text-[clamp(2.2rem,4vw,4.875rem)] leading-[1.02] text-black">OUR FEATURES</h2>
+                    </div>
+                </div>
+
+                <div class="hide-scrollbar snap-track -mx-4 flex gap-4 overflow-x-auto px-4 pb-3 sm:-mx-6 sm:px-6 lg:grid lg:grid-cols-3 lg:gap-6 lg:overflow-visible lg:px-0">
+                    @foreach ($featureCards as $card)
+                        <article class="snap-card min-w-[280px] flex-1 rounded-[28px] border border-black/10 bg-[#D9D9D9] p-6 soft-shadow transition-transform duration-300 hover:-translate-y-1 sm:min-w-[340px] sm:p-8 lg:min-w-0">
+                            <div class="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-white text-2xl text-[#3B3B3B] shadow-sm">{{ $card['icon'] }}</div>
+                            <h3 class="text-2xl font-semibold text-black sm:text-[2rem]">{{ $card['title'] }}</h3>
+                            <p class="mt-4 text-sm leading-7 text-[#3B3B3B] sm:text-base lg:text-lg">
+                                {{ $card['text'] }}
+                            </p>
+                        </article>
+                    @endforeach
+                </div>
+            </section>
+
+            <section class="px-4 pb-16 sm:px-6 lg:px-12 lg:pb-24" id="featured-projects">
+                <div class="mb-8 text-center">
+                    <p class="text-sm font-semibold tracking-[0.35em] text-[#3B3B3B] sm:text-base">PROJECTS</p>
+                    <h2 class="section-title mt-3 text-[clamp(2.2rem,4vw,4.875rem)] leading-[1.02] text-black">FEATURED PROJECTS</h2>
+                </div>
+
+                <div class="hide-scrollbar snap-track -mx-4 flex gap-4 overflow-x-auto px-4 pb-3 sm:-mx-6 sm:px-6 lg:-mx-12 lg:px-12">
+                    @foreach ($projects as $project)
+                        <article class="snap-card min-w-[78vw] overflow-hidden rounded-[28px] bg-white soft-shadow transition-transform duration-300 hover:-translate-y-1 sm:min-w-[420px] lg:min-w-[540px]">
+                            <img src="{{ $project['image'] }}" alt="{{ $project['title'] }}" class="h-[240px] w-full object-cover sm:h-[320px] lg:h-[380px]">
+                            <div class="flex items-center justify-between px-5 py-4 sm:px-6 sm:py-5">
+                                <h3 class="text-lg font-semibold text-black sm:text-xl">{{ $project['title'] }}</h3>
+                                <span class="text-xs font-semibold uppercase tracking-[0.3em] text-[#3B3B3B]">View</span>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+            </section>
+
+            <section class="px-4 pb-20 sm:px-6 lg:px-12 lg:pb-28">
+                <div class="rounded-[36px] bg-[#002643] px-6 py-10 text-white sm:px-10 sm:py-14 lg:rounded-[64px] lg:px-14 lg:py-16">
+                    <div class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
                         <div>
-                            <h3 class="text-2xl font-bold mb-2">Proyek Dimulai</h3>
-                            <p class="text-gray-600">
-                                Arsitek yang dipilih akan mengerjakan proyek. Status berubah menjadi "On Progress" dan
-                                dapat dipantau secara transparan.
+                            <p class="text-sm font-semibold tracking-[0.35em] text-white/70">GET STARTED</p>
+                            <h2 class="section-title mt-4 text-[clamp(2.2rem,4vw,4.875rem)] leading-[1.02] text-white">Ready to explore more?</h2>
+                            <p class="mt-5 max-w-2xl text-base leading-8 text-white/80 sm:text-lg lg:text-xl">
+                                Bergabung untuk melihat proyek, mencari kesempatan kerja arsitektur, dan mengelola profil profesional Anda dengan lebih rapi.
                             </p>
                         </div>
-                    </div>
-                </div>
 
-                <!-- Step 5 -->
-                <div class="bg-white p-8 rounded-2xl border-2 border-purple-200 hover:border-purple-500 card-hover">
-                    <div class="flex items-start gap-6">
-                        <div
-                            class="w-16 h-16 rounded-full bg-gradient-to-br from-red-600 to-orange-600 text-white font-bold text-xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                            5
-                        </div>
-                        <div>
-                            <h3 class="text-2xl font-bold mb-2">Selesai & Rating</h3>
-                            <p class="text-gray-600">
-                                Proyek selesai, status menjadi "Completed". Client memberikan rating dan review untuk
-                                membangun reputasi arsitek.
-                            </p>
+                        <div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:justify-start lg:justify-end">
+                            @auth
+                                <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold tracking-[0.2em] text-[#002643] transition hover:bg-white/90">
+                                    DASHBOARD
+                                </a>
+                            @else
+                                <a href="{{ route('register') }}" class="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold tracking-[0.2em] text-[#002643] transition hover:bg-white/90">
+                                    REGISTER
+                                </a>
+                                <a href="{{ route('login') }}" class="inline-flex items-center justify-center rounded-full border border-white px-6 py-3 text-sm font-semibold tracking-[0.2em] text-white transition hover:bg-white/10">
+                                    LOGIN
+                                </a>
+                            @endauth
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
+            </section>
 
-    <!-- CTA Section -->
-    <section class="py-24 px-6 gradient-primary text-white relative overflow-hidden">
-        <!-- Decorative Element -->
-        <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -mr-32 -mt-32"></div>
+            
+            @include('partials.footer')
 
-        <div class="max-w-4xl mx-auto text-center relative z-10">
-            <h3 class="text-4xl md:text-5xl font-bold mb-8">Siap Memulai Perjalanan Anda?</h3>
-            <p class="text-xl text-blue-100 mb-12 max-w-2xl mx-auto">
-                Bergabunglah dengan ribuan arsitek dan client yang sudah menemukan kesuksesan di PBL Arsitek
-            </p>
-
-            @auth
-                <a href="/dashboard"
-                    class="inline-block px-8 py-4 bg-white text-blue-600 font-bold rounded-lg hover:shadow-2xl hover:scale-105">
-                    Buka Dashboard Sekarang
-                </a>
-            @else
-                <a href="/register"
-                    class="inline-block px-8 py-4 bg-white text-blue-600 font-bold rounded-lg hover:shadow-2xl hover:scale-105 mr-4 mb-4">
-                    Daftar Sekarang - Gratis!
-                </a>
-                <a href="/login"
-                    class="inline-block px-8 py-4 border-2 border-white text-white font-bold rounded-lg hover:bg-white/10">
-                    Login Akun Existing
-                </a>
-            @endauth
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="py-12 px-6 bg-gray-950 text-gray-400 border-t border-gray-800">
-        <div class="max-w-6xl mx-auto">
-            <div class="grid md:grid-cols-5 gap-12 mb-12">
-                <div>
-                    <h5 class="text-white font-bold mb-4 flex items-center gap-2">
-                        <div class="w-8 h-8 rounded bg-gradient-to-br from-blue-600 to-purple-600"></div>
-                        PBL Arsitek
-                    </h5>
-                    <p class="text-sm">Marketplace lowongan kerja arsitek berbasis proyek kontrak dan freelance untuk
-                        menghubungkan talent dengan peluang terbaik.</p>
-                </div>
-                <div>
-                    <h6 class="text-white font-bold mb-4">Untuk Arsitek</h6>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-white">Browse Lowongan</a></li>
-                        <li><a href="#" class="hover:text-white">Buat Portofolio</a></li>
-                        <li><a href="#" class="hover:text-white">Submit Proposal</a></li>
-                        <li><a href="#" class="hover:text-white">Lihat Rating</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h6 class="text-white font-bold mb-4">Untuk Client</h6>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-white">Post Lowongan</a></li>
-                        <li><a href="#" class="hover:text-white">Browse Arsitek</a></li>
-                        <li><a href="#" class="hover:text-white">Kelola Proposal</a></li>
-                        <li><a href="#" class="hover:text-white">Track Proyek</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h6 class="text-white font-bold mb-4">Resources</h6>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-white">Dokumentasi</a></li>
-                        <li><a href="#" class="hover:text-white">Blog & Tips</a></li>
-                        <li><a href="#" class="hover:text-white">FAQ</a></li>
-                        <li><a href="#" class="hover:text-white">Support</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h6 class="text-white font-bold mb-4">Legal</h6>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
-                        <li><a href="#" class="hover:text-white">Terms of Service</a></li>
-                        <li><a href="#" class="hover:text-white">Contact</a></li>
-                        <li><a href="#" class="hover:text-white">About Us</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="border-t border-gray-800 pt-8 text-center text-sm">
-                <p>© 2026 PBL Arsitek - Marketplace Lowongan Kerja Arsitek. Semua hak dilindungi.</p>
-            </div>
-        </div>
-    </footer>
-
+        </main>
+    </div>
 </body>
-
 </html>
