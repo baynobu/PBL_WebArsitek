@@ -149,4 +149,6 @@ class ProposalController extends Controller
 
         return redirect()->route('proposal.show', $proposal)->with('success', 'Proposal telah ditolak.');
     }
+
+    
 }

@@ -13,6 +13,17 @@ use App\Models\ProyekTask;
 use App\Models\Proposal;
 use Illuminate\Support\Facades\Route;
 
+// Route::get('/', function () {
+//     $landingContents = LandingPageContent::query()
+//         ->where('is_active', true)
+//         ->orderBy('sort_order')
+//         ->get()
+//         ->groupBy('section')
+//         ->map(fn ($items) => $items->keyBy('key'));
+
+//     return view('welcome', compact('landingContents'));
+// });
+
 Route::get('/', function () {
     $landingContents = LandingPageContent::query()
         ->where('is_active', true)
@@ -21,7 +32,16 @@ Route::get('/', function () {
         ->groupBy('section')
         ->map(fn ($items) => $items->keyBy('key'));
 
-    return view('welcome', compact('landingContents'));
+    $projects = Proyek::where('is_hidden', false)
+        ->where('is_featured', true)
+        ->latest()
+        ->take(10)
+        ->get();
+
+    return view('welcome', compact(
+        'landingContents',
+        'projects'
+    ));
 });
 
 Route::get('/dashboard', function () {
@@ -98,5 +118,51 @@ Route::middleware(['auth', 'account.verified', 'role:client'])->group(function (
     Route::patch('/proposal/{proposal}/terima', [ProposalController::class, 'terima'])->name('proposal.terima');
     Route::patch('/proposal/{proposal}/tolak', [ProposalController::class, 'tolak'])->name('proposal.tolak');
 });
+
+Route::middleware(['auth', 'account.verified'])->group(function () {
+
+    Route::get('/proyek', [ProyekController::class, 'index'])
+        ->name('proyek.index');
+
+    Route::get('/proyek/{proyek}', [ProyekController::class, 'show'])
+        ->name('proyek.show');
+
+    Route::patch('/proyek/{proyek}/status',
+        [ProyekController::class, 'updateStatus'])
+        ->name('proyek.updateStatus');
+
+    Route::patch('/proyek/{proyek}/tasks/{task}/toggle',
+        [ProyekController::class, 'toggleTask'])
+        ->name('proyek.tasks.toggle');
+});
+
+Route::middleware(['auth', 'account.verified', 'role:client'])->group(function () {
+
+    Route::get('/client/proyek', [ProyekController::class, 'myProjects'])
+        ->name('proyek.my');
+
+    Route::get('/client/proyek/create', [ProyekController::class, 'create'])
+        ->name('proyek.create');
+
+    Route::post('/client/proyek', [ProyekController::class, 'store'])
+        ->name('proyek.store');
+
+    Route::delete('/client/proyek/{proyek}', [ProyekController::class, 'destroy'])
+        ->name('proyek.destroy');
+
+    Route::post('/proyek/{proyek}/tasks',
+        [ProyekController::class, 'storeTask'])
+        ->name('proyek.tasks.store');
+});
+
+Route::middleware(['auth', 'account.verified'])->group(function () {
+
+    Route::get('/proposal', [ProposalController::class, 'index'])
+        ->name('proposal.index');
+
+    Route::get('/proposal/{proposal}', [ProposalController::class, 'show'])
+        ->name('proposal.show');
+});
+
 
 require __DIR__ . '/auth.php';

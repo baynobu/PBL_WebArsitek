@@ -30,9 +30,10 @@
             letter-spacing: 0.25em;
         }
 
-        .body-text {
-            color: #3B3B3B;
-            line-height: 1.8;
+       .body-text {
+        font-family: 'Inter', sans-serif;
+        color: #3B3B3B;
+        line-height: 1.8;
         }
 
         .snap-track {
@@ -91,13 +92,14 @@
             ['icon' => '◈', 'title' => 'Tracking Status Proyek', 'text' => 'Monitor progress proyek dari Open ke On Progress ke Completed dengan transparansi penuh.'],
         ];
 
-        $projects = [
-            ['image' => 'https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1000&q=80', 'title' => 'Contemporary Residence'],
-            ['image' => 'https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1000&q=80', 'title' => 'Minimal Office Space'],
-            ['image' => 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1000&q=80', 'title' => 'Urban Lobby Concept'],
-            ['image' => 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1000&q=80', 'title' => 'Warm Interior Study'],
-            ['image' => 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1000&q=80', 'title' => 'Architects Studio'],
-        ];
+        // $projects = [
+        //     ['image' => 'https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1000&q=80', 'title' => 'Contemporary Residence'],
+        //     ['image' => 'https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1000&q=80', 'title' => 'Minimal Office Space'],
+        //     ['image' => 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1000&q=80', 'title' => 'Urban Lobby Concept'],
+        //     ['image' => 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1000&q=80', 'title' => 'Warm Interior Study'],
+        //     ['image' => 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1000&q=80', 'title' => 'Architects Studio'],
+        // ];
+
     @endphp
 
         <!-- Header -->
@@ -237,14 +239,56 @@
                 <br>
                 <div class="hide-scrollbar snap-track -mx-4 flex gap-4 overflow-x-auto px-4 pb-3 sm:-mx-6 sm:px-6 lg:-mx-12 lg:px-12">
                     @foreach ($projects as $project)
-                        <article class="snap-card min-w-[78vw] overflow-hidden rounded-[28px] bg-white soft-shadow transition-transform duration-300 hover:-translate-y-1 sm:min-w-[420px] lg:min-w-[540px]">
-                            <img src="{{ $project['image'] }}" alt="{{ $project['title'] }}" class="h-[240px] w-full object-cover sm:h-[320px] lg:h-[380px]">
-                            <div class="flex items-center justify-between px-5 py-4 sm:px-6 sm:py-5">
-                                <h3 class="text-lg font-semibold text-black sm:text-xl">{{ $project['title'] }}</h3>
-                                <span class="text-xs font-semibold uppercase tracking-[0.3em] text-[#3B3B3B]">View</span>
-                            </div>
-                        </article>
-                    @endforeach
+
+                <a href="{{ route('proyek.show', $project) }}" 
+                class="group snap-card min-w-[78vw] overflow-hidden rounded-[28px] bg-white soft-shadow transition-all duration-300 hover:-translate-y-2 sm:min-w-[420px] lg:min-w-[540px]" >
+
+        <!-- Image -->
+            <div class="relative overflow-hidden">
+
+            <img src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1000&q=80"
+                alt="{{ $project->judul }}"
+                class="h-[240px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[320px] lg:h-[380px]" >
+
+        <!-- Overlay -->
+            <div class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition duration-300 group-hover:opacity-100">
+
+            <span class="rounded-full border border-white px-6 py-3 text-lg font-semibold text-white">
+                Lihat Detail Proyek
+            </span>
+
+        </div>
+
+    </div>
+
+    <!-- Content -->
+    <div class="px-5 py-4 sm:px-6 sm:py-5">
+
+        <h3 class="text-lg font-semibold text-black sm:text-xl">
+            {{ $project->judul }}
+        </h3>
+
+        <p class="mt-2 text-sm leading-6 text-gray-600">
+            {{ Str::limit($project->deskripsi, 100) }}
+        </p>
+
+        <div class="mt-4 flex items-center justify-between">
+
+            <span class="text-sm text-gray-500">
+                {{ $project->lokasi ?? 'Indonesia' }}
+            </span>
+
+            <span class="rounded-full bg-[#002643] px-3 py-1 text-xs font-medium text-white">
+                {{ ucfirst($project->status) }}
+            </span>
+
+        </div>
+
+    </div>
+
+</a>
+
+@endforeach
                 </div>
             </section>
 
