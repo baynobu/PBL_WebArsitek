@@ -33,16 +33,20 @@
                 <div class="max-w-2xl space-y-4">
                     <div class="flex items-center gap-2">
                         <span class="h-1.5 w-1.5 rounded-full bg-amber-600"></span>
-                        <p class="uppercase tracking-[0.28em] text-xs font-semibold text-slate-400">Manajemen Proposal</p>
+                        <p class="uppercase tracking-[0.28em] text-xs font-semibold text-slate-400">@if(auth()->user()->role === 'arsitek') Proposal Diajukan @else Manajemen Proposal @endif</p>
                     </div>
                     <div class="space-y-3">
-                        <h1 class="text-3xl font-bold text-slate-950">Daftar Proposal</h1>
-                        <p class="max-w-xl text-sm leading-7 text-slate-500">Pantau, tinjau, dan kelola semua proposal penawaran yang masuk dari arsitek untuk proyek Anda.</p>
+                        <h1 class="text-3xl font-bold text-slate-950">@if(auth()->user()->role === 'arsitek') Proposal Diajukan @else Daftar Proposal @endif</h1>
+                        <p class="max-w-xl text-sm leading-7 text-slate-500">@if(auth()->user()->role === 'arsitek') Pantau status proposal penawaran yang telah Anda kirimkan untuk berbagai proyek. @else Pantau, tinjau, dan kelola semua proposal penawaran yang masuk dari arsitek untuk proyek Anda. @endif</p>
                     </div>
                 </div>
                 <div class="flex justify-start lg:justify-end">
                     <div class="inline-flex items-center rounded-2xl bg-slate-100 px-5 py-3 text-sm font-semibold text-slate-700">
-                        {{ $pendingProposals }} Proposal Menunggu
+                        @if(auth()->user()->role === 'arsitek')
+                            {{ $totalProposals }} Proposal Dikirim
+                        @else
+                            {{ $pendingProposals }} Proposal Menunggu
+                        @endif
                     </div>
                 </div>
             </div>
@@ -113,7 +117,7 @@
                                                         <div class="h-12 w-12 rounded-full bg-slate-100 text-slate-950 grid place-items-center text-base font-bold uppercase">{{ strtoupper(substr($architectName, 0, 2)) }}</div>
                                                         <div>
                                                             <p class="text-[11px] uppercase tracking-[0.26em] font-semibold text-slate-400">Arsitek</p>
-                                                            <p class="text-base font-bold text-slate-950">{{ $architectName }}</p>
+                                                            <a href="{{ route('arsitek.show', $proposal->arsitek_id) }}" class="text-base font-bold text-slate-950 hover:text-amber-600 transition underline underline-offset-2">{{ $architectName }}</a>
                                                         </div>
                                                     </div>
 
@@ -144,8 +148,12 @@
                                                 {{-- Actions --}}
                                                 <div class="flex flex-col gap-3 sm:items-end">
                                                     <a href="{{ route('proposal.show', $proposal) }}" class="inline-flex whitespace-nowrap items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50">Tinjau Detail</a>
-                                                    @if(in_array($status, ['menunggu review', 'menunggu', 'pending', 'review']))
-                                                        <button type="button" class="inline-flex whitespace-nowrap items-center justify-center rounded-xl bg-amber-700 px-4 py-3 text-sm font-medium text-white transition hover:bg-amber-800">Terima Proposal</button>
+                                                    @if(auth()->user()->role === 'client' && auth()->id() === $proposal->proyek->client_id && in_array($status, ['menunggu review', 'menunggu', 'pending', 'review']))
+                                                        <form method="post" action="{{ route('proposal.terima', $proposal) }}" onsubmit="return confirm('Apakah Anda yakin ingin menyetujui proposal ini?')">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <button type="submit" class="inline-flex whitespace-nowrap items-center justify-center rounded-xl bg-amber-700 px-4 py-3 text-sm font-medium text-white transition hover:bg-amber-800">Terima Proposal</button>
+                                                        </form>
                                                     @endif
                                                 </div>
                                             </div>

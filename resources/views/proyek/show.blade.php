@@ -250,7 +250,12 @@
                     <p class="mb-5 text-sm leading-6 text-slate-600">Proposal masuk dari arsitek kandidat.</p>
 
                     <div class="space-y-3">
-                        @forelse($proyek->proposal as $proposal)
+                        @php
+                            $visibleProposals = $proyek->proposal->filter(function ($p) use ($isClientOwner) {
+                                return $isClientOwner || (auth()->check() && auth()->id() === $p->arsitek_id);
+                            });
+                        @endphp
+                        @forelse($visibleProposals as $proposal)
                             @php
                                 $pStatus = strtolower($proposal->status);
                                 $pBadge = match(true) {

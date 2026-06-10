@@ -25,7 +25,7 @@
                     <div class="space-y-3">
                         <h1 class="text-3xl font-bold text-slate-950">Proposal untuk: {{ $proposal->proyek->judul }}</h1>
                         <div class="flex flex-wrap items-center gap-3">
-                            <span class="text-sm text-slate-500">Arsitek: <span class="font-semibold text-slate-700">{{ $proposal->arsitek->name ?? 'N/A' }}</span></span>
+                            <span class="text-sm text-slate-500">Arsitek: <a href="{{ route('arsitek.show', $proposal->arsitek_id) }}" class="font-semibold text-slate-700 hover:text-amber-600 transition underline underline-offset-2">{{ $proposal->arsitek->name ?? 'N/A' }}</a></span>
 
                             @php
                                 $status = strtolower($proposal->status);
