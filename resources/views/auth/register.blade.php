@@ -31,16 +31,16 @@
 
                 <div class="max-w-sm pt-2 sm:pt-4 lg:pt-0">
                     <p class="text-[clamp(3rem,7vw,5.625rem)] font-medium leading-none tracking-tight text-white">
-                        Join
+                        Mari
                     </p>
                     <p class="text-[clamp(3.25rem,7.5vw,6.25rem)] font-medium leading-none tracking-tight text-white">
-                        Us.
+                        Bergabung.
                     </p>
                 </div>
 
                 <div class="hidden max-w-md lg:block">
                     <p class="text-sm font-medium uppercase tracking-[0.4em] text-white/70">
-                        The Architects
+                        Architects Studio
                     </p>
 
                     <p class="mt-3 max-w-sm text-lg leading-relaxed text-white/85">
@@ -55,27 +55,27 @@
         <!-- Right Side -->
         <section class="flex w-full items-center justify-center px-4 py-8 sm:px-6 sm:py-10 lg:w-[49.95%] lg:px-8 lg:py-0">
 
-            <div class="w-full max-w-[43rem]">
+            <div class="w-full max-w-[28rem]">
 
-                <div class="rounded-[32px] border border-[#C6C6C6] bg-[#D9D9D9] px-6 py-8 shadow-[0_20px_50px_rgba(0,0,0,0.08)] sm:px-10 sm:py-10 lg:rounded-[45px] lg:px-12 lg:py-14">
+                <div class="rounded-[28px] border border-[#C6C6C6] bg-[#D9D9D9] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.08)] sm:p-8 lg:rounded-[36px]">
 
-                    <div class="mx-auto max-w-xl">
+                    <div class="mx-auto w-full">
 
                         <!-- Heading -->
-                        <div class="mb-8 text-center lg:mb-10">
-                            <h1 class="text-4xl font-medium leading-tight text-black sm:text-5xl">
-                                Register
+                        <div class="mb-6 text-center">
+                            <h1 class="text-3xl font-semibold leading-tight text-black sm:text-4xl">
+                                Daftar
                             </h1>
                         </div>
 
-                        <form method="POST" action="{{ route('register') }}" class="space-y-6">
+                        <form method="POST" action="{{ route('register') }}" class="space-y-4">
                             @csrf
 
                             <!-- Name -->
-                            <div class="space-y-2">
+                            <div class="space-y-1">
                                 <label for="name"
-                                    class="block text-2xl font-normal text-[#616161] sm:text-[30px]">
-                                    Name
+                                    class="block text-sm font-medium text-[#4A4A4A]">
+                                    Nama Lengkap
                                 </label>
 
                                 <input
@@ -86,17 +86,18 @@
                                     required
                                     autofocus
                                     autocomplete="name"
-                                    class="block w-full border-0 border-b border-[#616161] bg-transparent px-0 pb-3 pt-1 text-lg text-black focus:border-[#002643] focus:outline-none focus:ring-0 sm:text-xl"
+                                    placeholder="Nama Lengkap Anda"
+                                    class="block w-full rounded-xl border border-gray-300 bg-white/70 px-4 py-2.5 text-sm text-black placeholder:text-gray-400 focus:border-[#002643] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#002643] transition-all"
                                 >
 
-                                <x-input-error :messages="$errors->get('name')" />
+                                <x-input-error :messages="$errors->get('name')" class="pt-1 text-xs" />
                             </div>
 
                             <!-- Email -->
-                            <div class="space-y-2">
+                            <div class="space-y-1">
                                 <label for="email"
-                                    class="block text-2xl font-normal text-[#616161] sm:text-[30px]">
-                                    Email
+                                    class="block text-sm font-medium text-[#4A4A4A]">
+                                    Pos-el
                                 </label>
 
                                 <input
@@ -106,27 +107,28 @@
                                     value="{{ old('email') }}"
                                     required
                                     autocomplete="username"
-                                    class="block w-full border-0 border-b border-[#616161] bg-transparent px-0 pb-3 pt-1 text-lg text-black focus:border-[#002643] focus:outline-none focus:ring-0 sm:text-xl"
+                                    placeholder="example@email.com"
+                                    class="block w-full rounded-xl border border-gray-300 bg-white/70 px-4 py-2.5 text-sm text-black placeholder:text-gray-400 focus:border-[#002643] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#002643] transition-all"
                                 >
 
-                                <x-input-error :messages="$errors->get('email')" />
+                                <x-input-error :messages="$errors->get('email')" class="pt-1 text-xs" />
                             </div>
 
                             <!-- Role -->
-                            <div class="space-y-2">
+                            <div class="space-y-1">
                                 <label for="role"
-                                    class="block text-2xl font-normal text-[#616161] sm:text-[30px]">
+                                    class="block text-sm font-medium text-[#4A4A4A]">
                                     Daftar Sebagai
                                 </label>
 
                                 <select
                                     id="role"
                                     name="role"
-                                    class="block w-full border-0 border-b border-[#616161] bg-transparent px-0 pb-3 pt-1 text-lg text-black focus:border-[#002643] focus:outline-none focus:ring-0 sm:text-xl"
+                                    class="block w-full rounded-xl border border-gray-300 bg-white/70 px-4 py-2.5 text-sm text-black focus:border-[#002643] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#002643] transition-all"
                                 >
                                     <option value="client"
                                         {{ old('role') == 'client' ? 'selected' : '' }}>
-                                        Client
+                                        Klien
                                     </option>
 
                                     <option value="arsitek"
@@ -135,14 +137,14 @@
                                     </option>
                                 </select>
 
-                                <x-input-error :messages="$errors->get('role')" />
+                                <x-input-error :messages="$errors->get('role')" class="pt-1 text-xs" />
                             </div>
 
                             <!-- Password -->
-                            <div class="space-y-2">
+                            <div class="space-y-1">
                                 <label for="password"
-                                    class="block text-2xl font-normal text-[#616161] sm:text-[30px]">
-                                    Password
+                                    class="block text-sm font-medium text-[#4A4A4A]">
+                                    Kata Sandi
                                 </label>
 
                                 <input
@@ -151,17 +153,18 @@
                                     name="password"
                                     required
                                     autocomplete="new-password"
-                                    class="block w-full border-0 border-b border-[#616161] bg-transparent px-0 pb-3 pt-1 text-lg text-black focus:border-[#002643] focus:outline-none focus:ring-0 sm:text-xl"
+                                    placeholder="*******"
+                                    class="block w-full rounded-xl border border-gray-300 bg-white/70 px-4 py-2.5 text-sm text-black placeholder:text-gray-400 focus:border-[#002643] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#002643] transition-all"
                                 >
 
-                                <x-input-error :messages="$errors->get('password')" />
+                                <x-input-error :messages="$errors->get('password')" class="pt-1 text-xs" />
                             </div>
 
                             <!-- Confirm Password -->
-                            <div class="space-y-2">
+                            <div class="space-y-1">
                                 <label for="password_confirmation"
-                                    class="block text-2xl font-normal text-[#616161] sm:text-[30px]">
-                                    Confirm Password
+                                    class="block text-sm font-medium text-[#4A4A4A]">
+                                    Konfirmasi Kata Sandi
                                 </label>
 
                                 <input
@@ -170,29 +173,30 @@
                                     name="password_confirmation"
                                     required
                                     autocomplete="new-password"
-                                    class="block w-full border-0 border-b border-[#616161] bg-transparent px-0 pb-3 pt-1 text-lg text-black focus:border-[#002643] focus:outline-none focus:ring-0 sm:text-xl"
+                                    placeholder="*******"
+                                    class="block w-full rounded-xl border border-gray-300 bg-white/70 px-4 py-2.5 text-sm text-black placeholder:text-gray-400 focus:border-[#002643] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#002643] transition-all"
                                 >
 
-                                <x-input-error :messages="$errors->get('password_confirmation')" />
+                                <x-input-error :messages="$errors->get('password_confirmation')" class="pt-1 text-xs" />
                             </div>
 
                             <!-- Button -->
-                            <div class="pt-4">
+                            <div class="pt-3">
                                 <button
                                     type="submit"
-                                    class="flex h-[72px] w-full items-center justify-center rounded-[20px] bg-[#002643] px-6 text-2xl font-semibold text-white transition duration-150 hover:bg-[#00182b] focus:outline-none focus:ring-2 focus:ring-[#002643] focus:ring-offset-2 focus:ring-offset-[#D9D9D9] sm:h-[85px] sm:text-[35px]"
+                                    class="flex h-[48px] w-full items-center justify-center rounded-xl bg-[#002643] px-6 text-base font-semibold text-white transition duration-150 hover:bg-[#00182b] focus:outline-none focus:ring-2 focus:ring-[#002643] focus:ring-offset-2 focus:ring-offset-[#D9D9D9]"
                                 >
-                                    Register
+                                    Daftar
                                 </button>
                             </div>
 
                             <!-- Login Link -->
-                            <div class="pt-4 text-center">
+                            <div class="pt-2 text-center">
                                 <a href="{{ route('login') }}"
-                                   class="text-base font-normal text-black sm:text-[25px]">
-                                    Already have an account?
-                                    <span class="font-medium underline decoration-black/40 underline-offset-4">
-                                        Login
+                                   class="text-sm font-normal text-black">
+                                    Sudah memiliki akun?
+                                    <span class="font-semibold underline decoration-black/40 underline-offset-4">
+                                        Masuk
                                     </span>
                                 </a>
                             </div>

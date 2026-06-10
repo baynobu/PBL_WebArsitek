@@ -64,10 +64,9 @@
         $heroImage = data_get($landingContents ?? [], 'hero.image.value', 'https://images.unsplash.com/photo-1571989139085-cfedbbe6c282?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
 
         $featureStrip = [
-            ['label' => 'Architects Studio', 'href' => '#featured-projects'],
-            ['label' => 'Mulai Perjalanan Arsitektur Anda Bersama Kami', 'href' => '#hero-content'],
-            ['label' => 'Proyek Unggulan', 'href' => '#featured-projects'],
             ['label' => 'Tentang', 'href' => '#about'],
+            ['label' => 'Fitur Utama', 'href' => '#features'],
+            ['label' => 'Proyek Unggulan', 'href' => '#featured-projects'],
         ];
 
         $contentIntroTitle = data_get($landingContents ?? [], 'intro.title.value', 'TEMPAT DI MANA ARSITEK DITEMUKAN');
@@ -80,16 +79,16 @@
         $contentProfileText = data_get($landingContents ?? [], 'profile.text.value', 'Architects merupakan platform arsitektur modern yang berfokus pada penghubungan arsitek visioner dengan berbagai proyek inovatif. Kami menghadirkan ruang yang menggabungkan nilai estetika, fungsi, dan desain yang berkelanjutan untuk menciptakan pengalaman hidup yang lebih berkualitas. Melalui pendekatan desain yang terencana, estetika yang elegan, serta inovasi dalam pengolahan ruang, Architects Studio berkomitmen untuk memberikan solusi arsitektur kontemporer yang relevan dengan kebutuhan masa kini. Kami percaya bahwa arsitektur tidak hanya membentuk lingkungan fisik, tetapi juga mampu menginspirasi serta meningkatkan kualitas hidup masyarakat.');
         $contentProfileImage = data_get($landingContents ?? [], 'profile.image.value', 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1400&q=80');
 
-        $featureRole = data_get($landingContents ?? [], 'feature.account_role.value', 'Daftar sebagai Arsitek, Client, atau Admin. Verifikasi akun untuk keamanan maksimal.');
-        $featureMarketplace = data_get($landingContents ?? [], 'feature.marketplace.value', 'Client posting lowongan dengan judul, deskripsi, budget, deadline, dan lokasi yang jelas.');
-        $featureProposal = data_get($landingContents ?? [], 'feature.proposal_system.value', 'Arsitek submit proposal dengan harga, durasi, dan penawaran unik mereka untuk setiap proyek.');
+        $featureRole = data_get($landingContents ?? [], 'feature.account_role.value', 'Daftar sebagai Arsitek, Klien, atau Admin. Verifikasi akun untuk keamanan maksimal.');
+        $featureMarketplace = data_get($landingContents ?? [], 'feature.marketplace.value', 'Klien mempublikasikan lowongan dengan judul, deskripsi, anggaran, tenggat waktu, dan lokasi yang jelas.');
+        $featureProposal = data_get($landingContents ?? [], 'feature.proposal_system.value', 'Arsitek mengirimkan proposal dengan harga, durasi, dan penawaran unik mereka untuk setiap proyek.');
 
         $featureCards = [
-            ['icon' => '✦', 'title' => 'Manajemen Akun & Role', 'text' => $featureRole ?? 'Daftar sebagai Arsitek, Client, atau Admin. Verifikasi akun untuk keamanan maksimal.'],
-            ['icon' => '◫', 'title' => 'Marketplace Lowongan Proyek', 'text' => $featureMarketplace ?? 'Client posting lowongan dengan judul, deskripsi, budget, deadline, dan lokasi yang jelas.'],
-            ['icon' => '✉', 'title' => 'Sistem Proposal', 'text' => $featureProposal ?? 'Arsitek submit proposal dengan harga, durasi, dan penawaran unik mereka untuk setiap proyek.'],
-            ['icon' => '◌', 'title' => 'Profil & Portofolio Digital', 'text' => 'Arsitek showcase diri dengan foto, skill, pengalaman, dan gallery proyek-proyek terbaik mereka.'],
-            ['icon' => '◈', 'title' => 'Tracking Status Proyek', 'text' => 'Monitor progress proyek dari Open ke On Progress ke Completed dengan transparansi penuh.'],
+            ['icon' => '✦', 'title' => 'Manajemen Akun & Peran', 'text' => $featureRole ?? 'Daftar sebagai Arsitek, Klien, atau Admin. Verifikasi akun untuk keamanan maksimal.'],
+            ['icon' => '◫', 'title' => 'Pasar Lowongan Proyek', 'text' => $featureMarketplace ?? 'Klien mempublikasikan lowongan dengan judul, deskripsi, anggaran, tenggat waktu, dan lokasi yang jelas.'],
+            ['icon' => '✉', 'title' => 'Sistem Proposal', 'text' => $featureProposal ?? 'Arsitek mengirimkan proposal dengan harga, durasi, dan penawaran unik mereka untuk setiap proyek.'],
+            ['icon' => '◌', 'title' => 'Profil & Portofolio Digital', 'text' => 'Arsitek menampilkan profil dengan foto, keahlian, pengalaman, dan galeri proyek-proyek terbaik mereka.'],
+            ['icon' => '◈', 'title' => 'Pelacakan Status Proyek', 'text' => 'Pantau kemajuan proyek dari Terbuka ke Sedang Berjalan hingga Selesai dengan transparansi penuh.'],
         ];
 
         // $projects = [
@@ -231,66 +230,82 @@
             <br><br>
 
         <!-- Featured Projects -->
-            <section class="px-4 pb-16 sm:px-6 lg:px-12 lg:pb-24" id="featured-projects">
-                <div class="mb-8 text-center">
-                    <p class="text-sm font-semibold tracking-[0.35em] text-[#3B3B3B] sm:text-base"></p>
-                    <h2 class="section-title mt-3 text-[clamp(2.2rem,4vw,4.875rem)] leading-[1.02] text-black">PROYEK UNGGULAN</h2>
-                </div>
-                <br>
-                <div class="hide-scrollbar snap-track -mx-4 flex gap-4 overflow-x-auto px-4 pb-3 sm:-mx-6 sm:px-6 lg:-mx-12 lg:px-12">
+        <section class="px-4 pb-16 sm:px-6 lg:px-12 lg:pb-24" id="featured-projects">
+            <div class="mb-8 text-center">
+                <p class="text-sm font-semibold tracking-[0.35em] text-[#3B3B3B] sm:text-base"></p>
+                <h2 class="section-title mt-3 text-[clamp(2.2rem,4vw,4.875rem)] leading-[1.02] text-black">PROYEK UNGGULAN</h2>
+            </div>
+            <br>
+            <div class="relative group/slider mx-auto max-w-[1600px]">
+                <!-- Left Arrow -->
+                <button id="slide-left" class="absolute -left-2 top-1/2 -translate-y-1/2 z-10 hidden md:flex h-12 w-12 items-center justify-center rounded-full bg-white/95 text-black shadow-lg hover:bg-black hover:text-white transition-all duration-300 border border-black/5" aria-label="Sebelumnya">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                </button>
+
+                <!-- Scrollable Container -->
+                <div id="projects-slider" class="hide-scrollbar snap-track flex gap-6 overflow-x-auto pb-6 cursor-grab active:cursor-grabbing scroll-smooth select-none">
                     @foreach ($projects as $project)
+                        @php
+                            $statusTranslations = [
+                                'open' => 'Terbuka',
+                                'progress' => 'Sedang Berjalan',
+                                'completed' => 'Selesai',
+                            ];
+                            $projectStatus = strtolower($project->status);
+                            $translatedStatus = $statusTranslations[$projectStatus] ?? ucfirst($projectStatus);
+                        @endphp
+                        <a href="{{ route('proyek.show', $project) }}" 
+                           class="group snap-card min-w-[78vw] md:min-w-[420px] lg:min-w-[480px] xl:min-w-[520px] overflow-hidden rounded-[28px] bg-white border border-black/5 soft-shadow transition-all duration-300 hover:-translate-y-2 pointer-events-auto"
+                           draggable="false">
+                            <!-- Image -->
+                            <div class="relative overflow-hidden aspect-[16/10]" draggable="false">
+                                <img src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1000&q=80"
+                                     alt="{{ $project->judul }}"
+                                     class="h-full w-full object-cover transition duration-500 group-hover:scale-105 select-none"
+                                     draggable="false">
+                                <!-- Overlay -->
+                                <div class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition duration-300 group-hover:opacity-100">
+                                    <span class="rounded-full border border-white px-6 py-3 text-lg font-semibold text-white">
+                                        Lihat Detail Proyek
+                                    </span>
+                                </div>
+                            </div>
 
-                <a href="{{ route('proyek.show', $project) }}" 
-                class="group snap-card min-w-[78vw] overflow-hidden rounded-[28px] bg-white soft-shadow transition-all duration-300 hover:-translate-y-2 sm:min-w-[420px] lg:min-w-[540px]" >
-
-        <!-- Image -->
-            <div class="relative overflow-hidden">
-
-            <img src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1000&q=80"
-                alt="{{ $project->judul }}"
-                class="h-[240px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[320px] lg:h-[380px]" >
-
-        <!-- Overlay -->
-            <div class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition duration-300 group-hover:opacity-100">
-
-            <span class="rounded-full border border-white px-6 py-3 text-lg font-semibold text-white">
-                Lihat Detail Proyek
-            </span>
-
-        </div>
-
-    </div>
-
-    <!-- Content -->
-    <div class="px-5 py-4 sm:px-6 sm:py-5">
-
-        <h3 class="text-lg font-semibold text-black sm:text-xl">
-            {{ $project->judul }}
-        </h3>
-
-        <p class="mt-2 text-sm leading-6 text-gray-600">
-            {{ Str::limit($project->deskripsi, 100) }}
-        </p>
-
-        <div class="mt-4 flex items-center justify-between">
-
-            <span class="text-sm text-gray-500">
-                {{ $project->lokasi ?? 'Indonesia' }}
-            </span>
-
-            <span class="rounded-full bg-[#002643] px-3 py-1 text-xs font-medium text-white">
-                {{ ucfirst($project->status) }}
-            </span>
-
-        </div>
-
-    </div>
-
-</a>
-
-@endforeach
+                            <!-- Content -->
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-black line-clamp-1">
+                                    {{ $project->judul }}
+                                </h3>
+                                <p class="mt-2 text-sm leading-relaxed text-[#3B3B3B] line-clamp-2">
+                                    {{ Str::limit($project->deskripsi, 100) }}
+                                </p>
+                                <div class="mt-6 flex items-center justify-between pt-4 border-t border-black/5">
+                                    <span class="text-sm font-medium text-gray-500 flex items-center gap-1.5">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-gray-400">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                        </svg>
+                                        {{ $project->lokasi ?? 'Indonesia' }}
+                                    </span>
+                                    <span class="rounded-full bg-[#002643] px-4 py-1.5 text-xs font-semibold text-white tracking-wide">
+                                        {{ $translatedStatus }}
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    @endforeach
                 </div>
-            </section>
+
+                <!-- Right Arrow -->
+                <button id="slide-right" class="absolute -right-2 top-1/2 -translate-y-1/2 z-10 hidden md:flex h-12 w-12 items-center justify-center rounded-full bg-white/95 text-black shadow-lg hover:bg-black hover:text-white transition-all duration-300 border border-black/5" aria-label="Berikutnya">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+            </div>
+        </section>
 
             <section class="px-4 pb-20 sm:px-6 lg:px-12 lg:pb-28">
                 <div class="rounded-[36px] bg-[#002643] px-6 py-10 text-white sm:px-10 sm:py-14 lg:rounded-[64px] lg:px-14 lg:py-16">
@@ -326,5 +341,87 @@
 
         </main>
     </div>
+
+    <!-- Interactive Projects Slider Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slider = document.getElementById('projects-slider');
+            const leftArrow = document.getElementById('slide-left');
+            const rightArrow = document.getElementById('slide-right');
+
+            if (!slider) return;
+
+            // Scroll with buttons
+            if (leftArrow && rightArrow) {
+                leftArrow.addEventListener('click', () => {
+                    const cardWidth = slider.querySelector('.snap-card')?.offsetWidth || 400;
+                    slider.scrollBy({ left: -(cardWidth + 24), behavior: 'smooth' });
+                });
+
+                rightArrow.addEventListener('click', () => {
+                    const cardWidth = slider.querySelector('.snap-card')?.offsetWidth || 400;
+                    slider.scrollBy({ left: (cardWidth + 24), behavior: 'smooth' });
+                });
+
+                // Toggle arrow visibility based on scroll position
+                const toggleArrows = () => {
+                    const maxScroll = slider.scrollWidth - slider.clientWidth;
+                    if (slider.scrollLeft <= 5) {
+                        leftArrow.classList.add('opacity-50');
+                        leftArrow.style.pointerEvents = 'none';
+                    } else {
+                        leftArrow.classList.remove('opacity-50');
+                        leftArrow.style.pointerEvents = 'auto';
+                    }
+
+                    if (slider.scrollLeft >= maxScroll - 5) {
+                        rightArrow.classList.add('opacity-50');
+                        rightArrow.style.pointerEvents = 'none';
+                    } else {
+                        rightArrow.classList.remove('opacity-50');
+                        rightArrow.style.pointerEvents = 'auto';
+                    }
+                };
+
+                slider.addEventListener('scroll', toggleArrows);
+                window.addEventListener('resize', toggleArrows);
+                // Initial check
+                setTimeout(toggleArrows, 300);
+            }
+
+            // Mouse Drag to Scroll
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            slider.addEventListener('mousedown', (e) => {
+                isDown = true;
+                slider.classList.add('active');
+                slider.style.scrollBehavior = 'auto'; // Disable smooth scroll during drag
+                startX = e.pageX - slider.offsetLeft;
+                scrollLeft = slider.scrollLeft;
+            });
+
+            slider.addEventListener('mouseleave', () => {
+                isDown = false;
+                slider.classList.remove('active');
+                slider.style.scrollBehavior = 'smooth';
+            });
+
+            slider.addEventListener('mouseup', () => {
+                isDown = false;
+                slider.classList.remove('active');
+                slider.style.scrollBehavior = 'smooth';
+            });
+
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - slider.offsetLeft;
+                const walk = (x - startX) * 2; // scroll speed multiplier
+                slider.scrollLeft = scrollLeft - walk;
+            });
+        });
+    </script>
 </body>
 </html>

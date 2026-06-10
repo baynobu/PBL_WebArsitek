@@ -18,17 +18,13 @@
         </nav>
 
         <div class="flex items-center gap-3">
-            <a href="#featured-projects" class="hidden lg:inline-flex items-center justify-center rounded-full border border-black/10 px-5 py-2.5 text-sm font-semibold text-[#3B3B3B] transition hover:border-black hover:bg-black hover:text-white">
-                UNGGULAN
-            </a>
-
             @auth
                 <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center rounded-full bg-[#3B3B3B] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-black">
-                    Dashboard
+                    Dasbor
                 </a>
             @else
                 <a href="{{ route('login') }}" class="inline-flex items-center justify-center rounded-full bg-[#3B3B3B] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-black">
-                    {{ $navCta }}
+                    Masuk
                 </a>
             @endauth
 

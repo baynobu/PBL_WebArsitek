@@ -24,12 +24,12 @@
 
                     <div class="relative z-10 flex h-full w-full flex-1 flex-col justify-between p-6 sm:p-10 lg:p-12 xl:p-16">
                         <div class="max-w-sm pt-2 sm:pt-4 lg:pt-0">
-                            <p class="text-[clamp(3rem,7vw,5.625rem)] font-medium leading-none tracking-tight text-white">Hello</p>
-                            <p class="text-[clamp(3.25rem,7.5vw,6.25rem)] font-medium leading-none tracking-tight text-white">There.</p>
+                            <p class="text-[clamp(3rem,7vw,5.625rem)] font-medium leading-none tracking-tight text-white">Selamat</p>
+                            <p class="text-[clamp(3.25rem,7.5vw,6.25rem)] font-medium leading-none tracking-tight text-white">Datang.</p>
                         </div>
 
                         <div class="hidden max-w-md lg:block">
-                            <p class="text-sm font-medium uppercase tracking-[0.4em] text-white/70">The Architects</p>
+                            <p class="text-sm font-medium uppercase tracking-[0.4em] text-white/70">Architects Studio</p>
                             <p class="mt-3 max-w-sm text-lg leading-relaxed text-white/85">
                                 Masuk untuk mengelola proyek, proposal, portofolio, dan aktivitas admin dalam satu panel.
                             </p>
@@ -38,20 +38,20 @@
                 </section>
 
                 <section class="flex w-full items-center justify-center px-4 py-8 sm:px-6 sm:py-10 lg:w-[49.95%] lg:px-8 lg:py-0">
-                    <div class="w-full max-w-[43rem]">
-                        <div class="rounded-[32px] border border-[#C6C6C6] bg-[#D9D9D9] px-6 py-8 shadow-[0_20px_50px_rgba(0,0,0,0.08)] sm:px-10 sm:py-10 lg:rounded-[45px] lg:px-12 lg:py-14">
-                            <div class="mx-auto max-w-xl">
-                                <div class="mb-8 text-center lg:mb-10">
-                                    <h1 class="text-4xl font-medium leading-tight text-black sm:text-5xl">Login</h1>
+                    <div class="w-full max-w-[28rem]">
+                        <div class="rounded-[28px] border border-[#C6C6C6] bg-[#D9D9D9] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.08)] sm:p-8 lg:rounded-[36px]">
+                            <div class="mx-auto w-full">
+                                <div class="mb-6 text-center">
+                                    <h1 class="text-3xl font-semibold leading-tight text-black sm:text-4xl">Masuk</h1>
                                 </div>
 
-                                <x-auth-session-status class="mb-6 text-center" :status="session('status')" />
+                                <x-auth-session-status class="mb-4 text-center text-sm" :status="session('status')" />
 
-                                <form method="POST" action="{{ route('login') }}" class="space-y-8">
+                                <form method="POST" action="{{ route('login') }}" class="space-y-5">
                                     @csrf
 
-                                    <div class="space-y-2">
-                                        <label for="email" class="block text-2xl font-normal leading-none text-[#616161] sm:text-[30px]">Email</label>
+                                    <div class="space-y-1">
+                                        <label for="email" class="block text-sm font-medium text-[#4A4A4A]">Pos-el</label>
                                         <input
                                             id="email"
                                             type="email"
@@ -60,38 +60,40 @@
                                             required
                                             autofocus
                                             autocomplete="username"
-                                            class="block w-full border-0 border-b border-[#616161] bg-transparent px-0 pb-3 pt-1 text-lg text-black placeholder:text-[#8c8c8c] focus:border-[#002643] focus:outline-none focus:ring-0 sm:text-xl"
+                                            placeholder="example@email.com"
+                                            class="block w-full rounded-xl border border-gray-300 bg-white/70 px-4 py-2.5 text-sm text-black placeholder:text-gray-400 focus:border-[#002643] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#002643] transition-all"
                                         >
-                                        <x-input-error :messages="$errors->get('email')" class="pt-1" />
+                                        <x-input-error :messages="$errors->get('email')" class="pt-1 text-xs" />
                                     </div>
 
-                                    <div class="space-y-2">
-                                        <label for="password" class="block text-2xl font-normal leading-none text-[#616161] sm:text-[30px]">Password</label>
+                                    <div class="space-y-1">
+                                        <label for="password" class="block text-sm font-medium text-[#4A4A4A]">Kata Sandi</label>
                                         <input
                                             id="password"
                                             type="password"
                                             name="password"
                                             required
                                             autocomplete="current-password"
-                                            class="block w-full border-0 border-b border-[#616161] bg-transparent px-0 pb-3 pt-1 text-lg text-black placeholder:text-[#8c8c8c] focus:border-[#002643] focus:outline-none focus:ring-0 sm:text-xl"
+                                            placeholder="*******"
+                                            class="block w-full rounded-xl border border-gray-300 bg-white/70 px-4 py-2.5 text-sm text-black placeholder:text-gray-400 focus:border-[#002643] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#002643] transition-all"
                                         >
-                                        <x-input-error :messages="$errors->get('password')" class="pt-1" />
+                                        <x-input-error :messages="$errors->get('password')" class="pt-1 text-xs" />
                                     </div>
 
-                                    <div class="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
-                                        <label for="remember_me" class="inline-flex items-center gap-3 text-sm text-black sm:text-base">
+                                    <div class="flex flex-col gap-2 pt-1 sm:flex-row sm:items-center sm:justify-between">
+                                        <label for="remember_me" class="inline-flex items-center gap-2 text-xs text-black sm:text-sm">
                                             <input
                                                 id="remember_me"
                                                 type="checkbox"
-                                                class="h-5 w-5 rounded border-[#616161] text-[#002643] focus:ring-[#002643]"
+                                                class="h-4 w-4 rounded border-gray-300 text-[#002643] focus:ring-[#002643]"
                                                 name="remember"
                                             >
-                                            <span>Remember me</span>
+                                            <span>Ingat saya</span>
                                         </label>
 
                                         @if (Route::has('password.request'))
-                                            <a href="{{ route('password.request') }}" class="text-sm font-medium text-[#002643] underline decoration-[#002643]/50 underline-offset-4 transition hover:text-[#001828]">
-                                                Forgot your password?
+                                            <a href="{{ route('password.request') }}" class="text-xs font-medium text-[#002643] underline decoration-[#002643]/50 underline-offset-4 transition hover:text-[#001828]">
+                                                Lupa kata sandi Anda?
                                             </a>
                                         @endif
                                     </div>
@@ -99,19 +101,19 @@
                                     <div class="pt-2">
                                         <button
                                             type="submit"
-                                            class="flex h-[72px] w-full items-center justify-center rounded-[20px] bg-[#002643] px-6 text-2xl font-semibold text-white transition duration-150 hover:bg-[#00182b] focus:outline-none focus:ring-2 focus:ring-[#002643] focus:ring-offset-2 focus:ring-offset-[#D9D9D9] sm:h-[85px] sm:text-[35px]"
+                                            class="flex h-[48px] w-full items-center justify-center rounded-xl bg-[#002643] px-6 text-base font-semibold text-white transition duration-150 hover:bg-[#00182b] focus:outline-none focus:ring-2 focus:ring-[#002643] focus:ring-offset-2 focus:ring-offset-[#D9D9D9]"
                                         >
-                                            Login
+                                            Masuk
                                         </button>
                                     </div>
 
-                                    <div class="pt-4 text-center">
+                                    <div class="pt-2 text-center">
                                         @if (Route::has('register'))
-                                            <a href="{{ route('register') }}" class="text-base font-normal text-black sm:text-[25px]">
-                                                Don’t have account? <span class="font-medium underline decoration-black/40 underline-offset-4">sign up</span>
+                                            <a href="{{ route('register') }}" class="text-sm font-normal text-black">
+                                                Belum punya akun? <span class="font-semibold underline decoration-black/40 underline-offset-4">Daftar</span>
                                             </a>
                                         @else
-                                            <p class="text-base font-normal text-black sm:text-[25px]">Don’t have account? <span class="font-medium underline decoration-black/40 underline-offset-4">sign up</span></p>
+                                            <p class="text-sm font-normal text-black">Belum punya akun? <span class="font-semibold underline decoration-black/40 underline-offset-4">Daftar</span></p>
                                         @endif
                                     </div>
                                 </form>
