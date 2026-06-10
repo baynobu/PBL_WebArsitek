@@ -47,47 +47,55 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     $user = auth()->user();
 
-    // LOGIKA UNTUK ADMIN DASHBOARD
-    if ($user->role === 'admin') { 
-        // atau $user->role_id == 1 (kalau kamu pakai angka) {
-        $totalProyekPlatform = Proyek::count();
-        $unmoderatedProjects = Proyek::with('client')
-            ->whereNull('moderated_at') // Proyek yang belum dimoderasi
+    // 1. JIKA YANG LOGIN ADALAH ADMIN
+    if ($user->role === 'admin') {
+        $totalProyekPlatform = \App\Models\Proyek::count();
+        $unmoderatedProjects = \App\Models\Proyek::with('client')
+            ->whereNull('moderated_at') 
             ->latest()
             ->get();
         $proyekPendingModerasi = $unmoderatedProjects->count();
         
-        $totalProposalSistem = Proposal::count();
-        $recentProposals = Proposal::with(['arsitek', 'proyek'])
+        $totalProposalSistem = \App\Models\Proposal::count();
+        $recentProposals = \App\Models\Proposal::with(['arsitek', 'proyek'])
             ->latest()
             ->limit(5)
             ->get();
 
+        // Mereder dashboard khusus admin
         return view('dashboard', compact(
-            'user',
-            'totalProyekPlatform',
-            'unmoderatedProjects',
-            'proyekPendingModerasi',
-            'totalProposalSistem',
-            'recentProposals'
+            'user', 'totalProyekPlatform', 'unmoderatedProjects', 
+            'proyekPendingModerasi', 'totalProposalSistem', 'recentProposals'
         ));
     }
 
-    // LOGIKA UNTUK KLIEN DASHBOARD (Tetap dipertahankan kalau yang login klien)
-    $projectsInProgress = Proyek::with(['arsitekTerpilih', 'tasks'])
+    // 2. JIKA YANG LOGIN ADALAH ARSITEK
+    if ($user->role === 'arsitek') {
+        // Mengambil data proposal khusus arsitek yang sedang login
+        $proposals = \App\Models\Proposal::where('arsitek_id', $user->id)
+            ->with('proyek')
+            ->latest()
+            ->get();
+
+        // LANGSUNG DIALIKHAN KE VIEW MY-PROJECTS (WORKSPACE ARSITEK)
+        return view('arsitek.my-projects', compact('user', 'proposals'));
+    }
+
+    // 3. JIKA YANG LOGIN KLIEN (DEFAULT)
+    $projectsInProgress = \App\Models\Proyek::with(['arsitekTerpilih', 'tasks'])
         ->where('client_id', $user->id)
         ->where('status', 'progress')
         ->orderBy('updated_at', 'desc')
         ->get();
 
-    $totalProyek = Proyek::where('client_id', $user->id)->count();
+    $totalProyek = \App\Models\Proyek::where('client_id', $user->id)->count();
     $proyekAktif = $projectsInProgress->count();
-    $proposalMasuk = Proposal::whereHas('proyek', fn ($query) => $query->where('client_id', $user->id))
+    $proposalMasuk = \App\Models\Proposal::whereHas('proyek', fn ($query) => $query->where('client_id', $user->id))
         ->where('status', 'pending')
         ->count();
-    $totalAnggaran = Proyek::where('client_id', $user->id)->sum('budget');
+    $totalAnggaran = \App\Models\Proyek::where('client_id', $user->id)->sum('budget');
 
-    $recentTasks = ProyekTask::whereIn('proyek_id', $projectsInProgress->pluck('id'))
+    $recentTasks = \App\Models\ProyekTask::whereIn('proyek_id', $projectsInProgress->pluck('id'))
         ->orderByDesc('updated_at')
         ->limit(8)
         ->get();
@@ -104,10 +112,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Proyek - public listing and detail (Milestone 1)
 Route::get('/proyek', [ProyekController::class, 'index'])->middleware(['auth', 'account.verified'])->name('proyek.index');
 Route::get('/proyek/{proyek}', [ProyekController::class, 'show'])->middleware(['auth', 'account.verified'])->name('proyek.show');
 
-// ... (Sisa route Klien dan Arsitek sama seperti sebelumnya, tidak ada perubahan) ...
 Route::middleware(['auth', 'account.verified', 'role:client'])->group(function () {
     Route::get('/client/proyek', [ProyekController::class, 'myProjects'])->name('proyek.my');
     Route::get('/client/proyek/create', [ProyekController::class, 'create'])->name('proyek.create');
