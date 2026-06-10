@@ -35,7 +35,7 @@
         color: #3B3B3B;
         line-height: 1.8;
         }
-
+        
         .snap-track {
             scroll-snap-type: x mandatory;
         }
@@ -163,7 +163,7 @@
                         {{ $contentIntroEyebrow }}
                         </p>
 
-                            <p class="mt-5 w-full text-justify text-base leading-[1.8] text-[#3B3B3B] sm:text-lg lg:text-[1.125rem]">
+                            <p class="body-text w-full text-justify text-base leading-[1.9] text-[#3B3B3B] sm:text-lg lg:text-[1.125rem]">
                             {{ $contentIntroText }}
                         </p>
                     </div>
