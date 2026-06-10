@@ -107,17 +107,16 @@
                             <button type="submit" class="w-full rounded-2xl bg-slate-800 px-4 py-2 text-left text-sm text-white transition hover:bg-slate-700">Keluar</button>
                         </form>
                     </div>
-                </div>
-
-                <button @click="open = !open" class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white text-slate-950 shadow-sm shadow-slate-950/10 transition duration-200 hover:bg-slate-100 lg:hidden">
-                    <svg x-show="!open" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                    <svg x-show="open" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
             </div>
+
+            <button @click="open = !open" class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white text-slate-950 shadow-sm shadow-slate-950/10 transition duration-200 hover:bg-slate-100 lg:hidden">
+                <svg x-show="!open" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                <svg x-show="open" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
         </div>
     </div>
 

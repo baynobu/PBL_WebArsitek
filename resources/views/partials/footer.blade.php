@@ -1,6 +1,6 @@
 <footer class="w-full bg-[#D9D9D9]" id="kontak">
     <div class="mx-auto w-full max-w-[1920px] px-6 py-16">
-        <div class="grid gap-8 lg:grid-cols-4">
+        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
 
             <!-- Logo & Deskripsi -->
             <div>

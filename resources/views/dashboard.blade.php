@@ -69,7 +69,7 @@
                         </div>
                     </section>
 
-                    <section class="grid gap-6 xl:grid-cols-3">
+                    <section class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                         <article class="rounded-[2rem] border border-slate-100/70 bg-white/90 p-6 shadow-[0_12px_40px_rgba(15,23,42,0.08)] backdrop-blur-md">
                             <p class="text-base font-bold uppercase tracking-[0.14em] text-slate-950">Total Proyek</p>
                             <h2 class="mt-4 text-4xl font-extrabold text-slate-950">{{ $totalProyekPlatform ?? 0 }}</h2>
@@ -87,7 +87,7 @@
                         </article>
                     </section>
 
-                    <section class="grid gap-6 xl:grid-cols-[1.45fr_1fr]">
+                    <section class="grid gap-6 lg:grid-cols-[1.45fr_1fr]">
                         <div class="rounded-[2rem] border border-slate-100/70 bg-white/90 p-6 shadow-[0_8px_30px_rgba(15,23,42,0.04)] backdrop-blur-md">
                             <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                                 <div>
@@ -502,7 +502,7 @@
                     </div>
                 </section>
 
-                <section class="grid gap-6 xl:grid-cols-3">
+                <section class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     <article class="rounded-[2rem] border border-slate-100/70 bg-white/90 p-6 shadow-[0_12px_40px_rgba(15,23,42,0.08)] backdrop-blur-md">
                         <p class="text-base font-bold uppercase tracking-[0.14em] text-slate-950">Total Proyek</p>
                         <h2 class="mt-4 text-4xl font-extrabold text-slate-950">{{ $totalProyek ?? 0 }}</h2>
@@ -520,7 +520,7 @@
                     </article>
                 </section>
 
-                <section class="grid gap-6 xl:grid-cols-[1.45fr_1fr]">
+                <section class="grid gap-6 lg:grid-cols-[1.45fr_1fr]">
                     <div class="rounded-[2rem] border border-slate-100/70 bg-white/90 p-6 shadow-[0_8px_30px_rgba(15,23,42,0.04)] backdrop-blur-md">
                         <p class="text-base font-bold uppercase tracking-[0.14em] text-slate-950 mb-6">Pekerjaan Proyek Aktif</p>
                         <div class="space-y-6">
