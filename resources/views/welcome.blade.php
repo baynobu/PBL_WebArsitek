@@ -64,9 +64,9 @@
 
         $featureStrip = [
             ['label' => 'Architects Studio', 'href' => '#featured-projects'],
-            ['label' => 'Your Next Architecture Journey Starts Here', 'href' => '#hero-content'],
-            ['label' => 'Featured Works', 'href' => '#featured-projects'],
-            ['label' => 'About', 'href' => '#about'],
+            ['label' => 'Mulai Perjalanan Arsitektur Anda Bersama Kami', 'href' => '#hero-content'],
+            ['label' => 'Proyek Unggulan', 'href' => '#featured-projects'],
+            ['label' => 'Tentang', 'href' => '#about'],
         ];
 
         $contentIntroTitle = data_get($landingContents ?? [], 'intro.title.value', 'TEMPAT DI MANA ARSITEK DITEMUKAN');
