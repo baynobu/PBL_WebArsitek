@@ -33,12 +33,6 @@ class Proyek extends Model
         'moderation_note',
     ];
 
-    // SCOPE BARU UNTUK DASHBOARD ADMIN
-    public function scopeUnmoderated($query)
-    {
-        return $query->whereNull('moderated_at');
-    }
-
     public function client()
     {
         return $this->belongsTo(User::class, 'client_id');
