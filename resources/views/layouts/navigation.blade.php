@@ -34,7 +34,7 @@
             ];
         } elseif ($role === 'admin') {
             $menuItems = [
-                ['label' => 'Panel Admin', 'href' => url('/admin'), 'active' => request()->is('admin') || request()->is('admin/*')],
+                ['label' => 'Beranda', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
             ];
         }
     @endphp
@@ -93,50 +93,18 @@
                 </div>
 
                 <div class="relative">
-                    <button type="button" @click="notificationsOpen = !notificationsOpen; searchOpen = false" class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-slate-950 shadow-sm shadow-slate-950/10 transition duration-200 hover:bg-slate-100">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                        </svg>
-                        @if($unreadCount)
-                            <span class="absolute -right-0.5 -top-0.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-500 px-1.5 text-[10px] font-semibold text-white">{{ $unreadCount }}</span>
-                        @endif
-                    </button>
-                    <div x-show="notificationsOpen" x-cloak @click.away="notificationsOpen = false" x-transition class="absolute right-0 z-50 mt-3 w-80 rounded-2xl border border-slate-200 bg-white p-4 shadow-xl">
-                        <p class="text-sm font-semibold text-slate-950">Notifikasi</p>
-                        <div class="mt-3 space-y-3">
-                            @if($notifications->isEmpty())
-                                <div class="rounded-2xl bg-slate-50 p-3 text-sm text-slate-500">Tidak ada notifikasi baru.</div>
-                            @else
-                                @foreach($notifications as $notification)
-                                    <div class="rounded-2xl border border-slate-100 bg-slate-50 p-3 text-sm text-slate-700">
-                                        {{ \Illuminate\Support\Str::limit($notification->data['message'] ?? $notification->type, 80) }}
-                                        <div class="mt-2 text-xs text-slate-500">{{ $notification->created_at->diffForHumans() }}</div>
-                                    </div>
-                                @endforeach
-                            @endif
-                        </div>
-                    </div>
-                </div>
-
-                <div class="relative">
-                    <button @click="profileOpen = ! profileOpen" @click.away="profileOpen = false" class="inline-flex items-center gap-3 rounded-full border border-white bg-white px-2.5 py-2 text-sm font-medium text-slate-950 shadow-sm shadow-slate-950/10 transition duration-200 hover:bg-slate-100">
-                        <span class="inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white">
-                            @auth
-                                <img src="{{ Auth::user()->profile_photo_url ?? asset('images/default-avatar.png') }}" alt="{{ Auth::user()->name }}" class="h-full w-full object-cover" />
-                            @else
-                                <span class="text-sm font-semibold text-slate-700">U</span>
-                            @endauth
-                        </span>
+                    <button @click="profileOpen = ! profileOpen" @click.away="profileOpen = false" class="inline-flex items-center gap-3 rounded-full border border-white bg-white px-4 py-2 text-sm font-semibold text-slate-950 shadow-sm shadow-slate-950/10 transition duration-200 hover:bg-slate-100">
+                        <span>{{ Auth::user()?->name ?? 'User' }}</span>
                         <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
 
                     <div x-show="profileOpen" x-transition.opacity class="absolute right-0 z-50 mt-2 w-52 origin-top-right rounded-2xl border border-slate-800/60 bg-slate-950 p-2 shadow-xl ring-1 ring-slate-800/70">
-                        <a href="{{ route('profile.edit') }}" class="block rounded-2xl bg-slate-800 px-4 py-2 text-sm text-white transition hover:bg-slate-700">Kelola Profil</a>
+                        <a href="{{ route('profile.edit') }}" class="block rounded-2xl bg-slate-800 px-4 py-2 text-sm text-white transition hover:bg-slate-700">Kelola Akun</a>
                         <form method="POST" action="{{ route('logout') }}" class="mt-1">
                             @csrf
-                            <button type="submit" class="w-full rounded-2xl bg-slate-800 px-4 py-2 text-left text-sm text-white transition hover:bg-slate-700">Logout</button>
+                            <button type="submit" class="w-full rounded-2xl bg-slate-800 px-4 py-2 text-left text-sm text-white transition hover:bg-slate-700">Keluar</button>
                         </form>
                     </div>
                 </div>
@@ -188,19 +156,16 @@
             @auth
                 <div class="mt-4 border-t border-slate-800 pt-4">
                     <div class="flex items-center gap-3">
-                        <span class="inline-flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-slate-800">
-                            <img src="{{ Auth::user()->profile_photo_url ?? asset('images/default-avatar.png') }}" alt="{{ Auth::user()->name }}" class="h-full w-full object-cover" />
-                        </span>
                         <div>
                             <p class="text-sm font-semibold text-white">{{ Auth::user()->name }}</p>
-                            <p class="text-xs text-slate-400">Client</p>
+                            <p class="text-xs text-slate-400">{{ ucfirst(Auth::user()->role) }}</p>
                         </div>
                     </div>
                     <div class="mt-4 space-y-2">
-                        <a href="{{ route('profile.edit') }}" class="block rounded-2xl bg-stone-800 px-4 py-3 text-sm text-white transition hover:bg-stone-700">Kelola Profil</a>
+                        <a href="{{ route('profile.edit') }}" class="block rounded-2xl bg-stone-800 px-4 py-3 text-sm text-white transition hover:bg-stone-700">Kelola Akun</a>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button type="submit" class="w-full rounded-2xl bg-stone-800 px-4 py-3 text-left text-sm text-white transition hover:bg-stone-700">Logout</button>
+                            <button type="submit" class="w-full rounded-2xl bg-stone-800 px-4 py-3 text-left text-sm text-white transition hover:bg-stone-700">Keluar</button>
                         </form>
                     </div>
                 </div>

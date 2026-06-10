@@ -49,24 +49,7 @@ Route::get('/dashboard', function () {
 
     // 1. JIKA YANG LOGIN ADALAH ADMIN
     if ($user->role === 'admin') {
-        $totalProyekPlatform = \App\Models\Proyek::count();
-        $unmoderatedProjects = \App\Models\Proyek::with('client')
-            ->whereNull('moderated_at') 
-            ->latest()
-            ->get();
-        $proyekPendingModerasi = $unmoderatedProjects->count();
-        
-        $totalProposalSistem = \App\Models\Proposal::count();
-        $recentProposals = \App\Models\Proposal::with(['arsitek', 'proyek'])
-            ->latest()
-            ->limit(5)
-            ->get();
-
-        // Mereder dashboard khusus admin
-        return view('dashboard', compact(
-            'user', 'totalProyekPlatform', 'unmoderatedProjects', 
-            'proyekPendingModerasi', 'totalProposalSistem', 'recentProposals'
-        ));
+        return app(App\Http\Controllers\AdminController::class)->index(request());
     }
 
     // 2. JIKA YANG LOGIN ADALAH ARSITEK
@@ -172,5 +155,26 @@ Route::middleware(['auth', 'account.verified'])->group(function () {
         ->name('proposal.show');
 });
 
+// Arsitek and Portofolio routes
+Route::middleware(['auth', 'account.verified', 'role:arsitek'])->group(function () {
+    Route::get('/arsitek/proyek', [ArsitekController::class, 'myProjects'])->name('arsitek.proyek');
+    Route::get('/arsitek/profile/edit', [ProfilArsitekController::class, 'edit'])->name('arsitek.profile.edit');
+    Route::post('/arsitek/profile/edit', [ProfilArsitekController::class, 'update'])->name('arsitek.profile.update');
+    Route::resource('portofolio', PortofolioController::class)->except(['show']);
+});
+
+// Arsitek public profile
+Route::get('/arsitek/{user}', [ArsitekController::class, 'show'])->name('arsitek.show');
+
+// Admin panel actions routes
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::post('/admin/users/{user}/approve', [App\Http\Controllers\AdminController::class, 'approveUser'])->name('admin.users.approve');
+    Route::post('/admin/users/{user}/reject', [App\Http\Controllers\AdminController::class, 'rejectUser'])->name('admin.users.reject');
+    Route::post('/admin/proyek/{proyek}/toggle-featured', [App\Http\Controllers\AdminController::class, 'toggleProjectFeatured'])->name('admin.proyek.toggle-featured');
+    Route::post('/admin/proyek/{proyek}/toggle-hidden', [App\Http\Controllers\AdminController::class, 'toggleProjectHidden'])->name('admin.proyek.toggle-hidden');
+    Route::post('/admin/landing-content', [App\Http\Controllers\AdminController::class, 'storeLandingContent'])->name('admin.landing-content.store');
+    Route::put('/admin/landing-content/{content}', [App\Http\Controllers\AdminController::class, 'updateLandingContent'])->name('admin.landing-content.update');
+    Route::delete('/admin/landing-content/{content}', [App\Http\Controllers\AdminController::class, 'destroyLandingContent'])->name('admin.landing-content.destroy');
+});
 
 require __DIR__ . '/auth.php';

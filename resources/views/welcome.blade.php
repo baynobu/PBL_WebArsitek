@@ -106,6 +106,34 @@
 
         <!-- Hero Section -->
         <main id="top" class="w-full">
+            @auth
+                @if(is_null(auth()->user()->email_verified_at))
+                    <div class="bg-amber-50 border-b border-amber-200 py-4 px-5">
+                        <div class="max-w-[1600px] mx-auto flex items-center justify-between flex-wrap gap-4 text-sm text-amber-800">
+                            <div class="flex items-center gap-3 font-medium">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 text-amber-600 shrink-0">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                                <span><strong>Pemberitahuan Akun:</strong> Pendaftaran Anda berhasil, namun akun Anda saat ini <strong>belum diverifikasi</strong> oleh administrator. Anda belum dapat mengakses fitur platform sampai proses verifikasi selesai.</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <button type="button" onclick="window.location.reload();" class="inline-flex items-center gap-2 rounded-full bg-amber-600 px-4 py-2 text-xs font-bold text-white transition hover:bg-amber-700 active:scale-95">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                    </svg>
+                                    Perbarui Status
+                                </button>
+                                <form method="POST" action="{{ route('logout') }}" class="inline">
+                                    @csrf
+                                    <button type="submit" class="inline-flex items-center gap-1.5 rounded-full bg-red-600 px-4 py-2 text-xs font-bold text-white transition hover:bg-red-700 active:scale-95">
+                                        Keluar
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            @endauth
             <section class="px-5 py-12 sm:px-8 lg:px-12 xl:px-16 2xl:px-20">
                 <div class="mx-auto max-w-[1600px] space-y-8">
                     <!-- Text Section -->
@@ -208,7 +236,7 @@
             <br><br><br>
 
             <!-- Header Features -->
-            <section class="px-4 pb-16 sm:px-6 lg:px-12 lg:pb-24">
+            <section id="features" class="px-4 pb-16 sm:px-6 lg:px-12 lg:pb-24">
                 <div class="mx-auto mb-12 max-w-7xl text-center">
                     <h2 class="section-title text-[clamp(2.2rem,4vw,4.875rem)] leading-none text-black">
                         FITUR UTAMA PLATFORM KAMI

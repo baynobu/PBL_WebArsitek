@@ -1,51 +1,73 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-10">
-    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-6">
-        <div class="rounded-2xl bg-gradient-to-r from-slate-700 to-slate-900 px-6 py-6 text-white shadow-lg">
-            <p class="text-xs uppercase tracking-[0.2em] text-slate-200">Arsitek Workspace</p>
-            <h1 class="mt-2 text-3xl font-bold">Edit Profil Arsitek</h1>
-            <p class="mt-2 text-sm text-slate-200">Perbarui informasi profil agar portofolio dan identitas Anda terlihat lebih profesional.</p>
-        </div>
+<div class="min-h-screen bg-stone-50 py-12 text-stone-900">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-10">
+        
+        <header class="border-b border-stone-200 pb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+            <div class="space-y-2">
+                <div class="flex items-center gap-2">
+                    <span class="h-2 w-2 rounded-full bg-amber-600 animate-pulse"></span>
+                    <p class="text-xs font-bold uppercase tracking-[0.25em] text-stone-500">Studio Kerja Arsitek</p>
+                </div>
+                <h1 class="text-4xl font-black tracking-tight text-stone-900 sm:text-5xl">Ubah Profil Arsitek</h1>
+                <p class="max-w-2xl text-sm text-stone-600 leading-relaxed">Perbarui informasi profil agar portofolio dan identitas Anda terlihat lebih profesional.</p>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center rounded-xl border border-stone-300 bg-white px-5 py-3 text-xs font-semibold text-stone-700 transition hover:bg-stone-50">
+                    Kembali
+                </a>
+            </div>
+        </header>
 
         @if(session('success'))
-            <div class="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-700">{{ session('success') }}</div>
+            <div class="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-700 font-medium">{{ session('success') }}</div>
         @endif
 
-        <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700">
-            <form action="{{ route('arsitek.profile.update') }}" method="post" enctype="multipart/form-data" class="space-y-5">
+        <div class="rounded-2xl border border-stone-200 bg-white p-8 shadow-sm w-full">
+            <form action="{{ route('arsitek.profile.update') }}" method="post" enctype="multipart/form-data" class="space-y-6">
                 @csrf
                 @method('PATCH')
 
-                <div>
-                    <label class="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-200">Foto Profil</label>
-                    @if($profil->foto)
-                        <img src="{{ asset('storage/' . $profil->foto) }}" alt="foto" class="mb-3 h-28 w-28 rounded-2xl object-cover ring-4 ring-white dark:ring-gray-800">
-                    @endif
-                    <input type="file" name="foto" accept="image/*" class="block w-full text-sm text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-slate-700 file:px-4 file:py-2 file:text-white hover:file:bg-slate-800 dark:text-gray-300">
-                    @error('foto') <div class="mt-1 text-sm text-red-600">{{ $message }}</div> @enderror
+                <div class="grid gap-4 md:grid-cols-[150px,1fr]">
+                    <div class="rounded-xl border border-stone-200 bg-stone-50 p-3 flex flex-col items-center justify-center">
+                        <label class="mb-2 block text-[10px] font-bold uppercase tracking-wider text-stone-500">Foto Profil</label>
+                        @if($profil->foto)
+                            <img src="{{ asset('storage/' . $profil->foto) }}" alt="foto profil" class="h-24 w-24 rounded-full object-cover border border-stone-200">
+                        @else
+                            <div class="h-24 w-24 rounded-full bg-stone-200 flex items-center justify-center text-stone-400 font-bold">Foto</div>
+                        @endif
+                    </div>
+                    <div class="space-y-2 flex flex-col justify-center">
+                        <label class="block text-sm font-semibold text-stone-850">Unggah Foto Profil Baru</label>
+                        <input type="file" name="foto" accept="image/*" class="block w-full text-sm text-stone-500 file:mr-4 file:rounded-xl file:border-0 file:bg-stone-900 file:px-4 file:py-2.5 file:text-xs file:font-semibold file:uppercase file:tracking-wider file:text-white hover:file:bg-stone-800 transition">
+                        @error('foto') <div class="mt-1 text-xs text-red-600">{{ $message }}</div> @enderror
+                    </div>
                 </div>
 
-                <div>
-                    <label class="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-200">Skill (comma separated)</label>
-                    <input type="text" name="skill" value="{{ old('skill', $profil->skill ?? '') }}" class="w-full rounded-lg border-gray-300 bg-gray-50 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100">
-                    @error('skill') <div class="mt-1 text-sm text-red-600">{{ $message }}</div> @enderror
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-stone-850">Keahlian (pisahkan dengan koma)</label>
+                    <input type="text" name="skill" value="{{ old('skill', $profil->skill ?? '') }}" placeholder="Contoh: AutoCAD, SketchUp, Blender, Desain Interior" class="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-900 placeholder:text-stone-400 focus:border-amber-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-amber-500 transition-all">
+                    @error('skill') <div class="mt-1 text-xs text-red-600">{{ $message }}</div> @enderror
                 </div>
 
-                <div>
-                    <label class="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-200">Deskripsi</label>
-                    <textarea name="deskripsi" rows="6" class="w-full rounded-lg border-gray-300 bg-gray-50 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100">{{ old('deskripsi', $profil->deskripsi ?? '') }}</textarea>
-                    @error('deskripsi') <div class="mt-1 text-sm text-red-600">{{ $message }}</div> @enderror
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-stone-850">Deskripsi Diri</label>
+                    <textarea name="deskripsi" rows="6" placeholder="Ceritakan latar belakang Anda, filosofi desain, dan spesialisasi arsitektur Anda..." class="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-900 placeholder:text-stone-400 focus:border-amber-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-amber-500 transition-all">{{ old('deskripsi', $profil->deskripsi ?? '') }}</textarea>
+                    @error('deskripsi') <div class="mt-1 text-xs text-red-600">{{ $message }}</div> @enderror
                 </div>
 
-                <div>
-                    <label class="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-200">Pengalaman</label>
-                    <textarea name="pengalaman" rows="4" class="w-full rounded-lg border-gray-300 bg-gray-50 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100">{{ old('pengalaman', $profil->pengalaman ?? '') }}</textarea>
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-stone-850">Pengalaman Kerja</label>
+                    <textarea name="pengalaman" rows="4" placeholder="Sebutkan proyek besar yang pernah Anda kerjakan atau riwayat studio tempat bekerja sebelumnya..." class="block w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-900 placeholder:text-stone-400 focus:border-amber-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-amber-500 transition-all">{{ old('pengalaman', $profil->pengalaman ?? '') }}</textarea>
+                    @error('pengalaman') <div class="mt-1 text-xs text-red-600">{{ $message }}</div> @enderror
                 </div>
 
-                <div class="flex justify-end border-t border-gray-200 pt-5 dark:border-gray-700">
-                    <button class="inline-flex items-center rounded-lg bg-slate-700 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800">Simpan Profil</button>
+                <div class="flex justify-end border-t border-stone-100 pt-6">
+                    <button class="inline-flex items-center justify-center rounded-xl bg-amber-600 px-6 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-md shadow-amber-900/10 transition hover:bg-amber-700">
+                        Simpan Profil
+                    </button>
                 </div>
             </form>
         </div>
