@@ -171,6 +171,7 @@
                         @else
                             <div class="mt-5 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700">Rating arsitek sudah dikirim.</div>
                         @endif
+                    @endif
                     @if($isClientOwner && $proyek->status === 'open')
                         <form method="post" action="{{ route('proyek.destroy', $proyek) }}" class="mt-3" onsubmit="return confirm('Apakah Anda yakin ingin menghapus proyek ini?')">
                             @csrf

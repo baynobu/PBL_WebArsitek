@@ -1,8 +1,5 @@
 @extends('layouts.app')
 
-@block('content')
-@endblock
-
 @section('content')
 <div class="min-h-screen bg-stone-50 py-12 text-stone-900">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-10">
