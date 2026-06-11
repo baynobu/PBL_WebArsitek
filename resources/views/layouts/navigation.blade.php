@@ -26,7 +26,7 @@
             ];
         } elseif ($role === 'arsitek') {
             $menuItems = [
-                ['label' => 'Beranda', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard')],
+                ['label' => 'Beranda', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard') || request()->routeIs('proyek.show')],
                 ['label' => 'Proposal Diajukan', 'href' => route('proposal.index'), 'active' => request()->routeIs('proposal.index') || request()->routeIs('proposal.show') || request()->routeIs('proposal.create')],
                 ['label' => 'Proyek Saya', 'href' => route('arsitek.proyek'), 'active' => request()->routeIs('arsitek.proyek')],
                 ['label' => 'Portofolio Saya', 'href' => route('portofolio.index'), 'active' => request()->routeIs('portofolio.index') || request()->routeIs('portofolio.create') || request()->routeIs('portofolio.edit')],

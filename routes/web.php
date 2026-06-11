@@ -54,14 +54,12 @@ Route::get('/dashboard', function () {
 
     // 2. JIKA YANG LOGIN ADALAH ARSITEK
     if ($user->role === 'arsitek') {
-        // Mengambil data proposal khusus arsitek yang sedang login
-        $proposals = \App\Models\Proposal::where('arsitek_id', $user->id)
-            ->with('proyek')
+        $proyeks = \App\Models\Proyek::where('is_hidden', false)
+            ->where('status', 'open')
             ->latest()
-            ->get();
+            ->paginate(10);
 
-        // LANGSUNG DIALIKHAN KE VIEW MY-PROJECTS (WORKSPACE ARSITEK)
-        return view('arsitek.my-projects', compact('user', 'proposals'));
+        return view('dashboard', compact('user', 'proyeks'));
     }
 
     // 3. JIKA YANG LOGIN KLIEN (DEFAULT)
@@ -159,8 +157,12 @@ Route::middleware(['auth', 'account.verified'])->group(function () {
 Route::middleware(['auth', 'account.verified', 'role:arsitek'])->group(function () {
     Route::get('/arsitek/proyek', [ArsitekController::class, 'myProjects'])->name('arsitek.proyek');
     Route::get('/arsitek/profile/edit', [ProfilArsitekController::class, 'edit'])->name('arsitek.profile.edit');
-    Route::post('/arsitek/profile/edit', [ProfilArsitekController::class, 'update'])->name('arsitek.profile.update');
+    Route::match(['post', 'patch'], '/arsitek/profile/edit', [ProfilArsitekController::class, 'update'])->name('arsitek.profile.update');
     Route::resource('portofolio', PortofolioController::class)->except(['show']);
+
+    // Proposal submission
+    Route::get('/proyek/{proyek}/proposal/create', [ProposalController::class, 'create'])->name('proposal.create');
+    Route::post('/proyek/{proyek}/proposal', [ProposalController::class, 'store'])->name('proposal.store');
 });
 
 // Arsitek public profile

@@ -164,6 +164,10 @@ class ProyekController extends Controller
             abort(403);
         }
 
+        if ($proyek->status !== 'open') {
+            return redirect()->route('proyek.my')->with('error', 'Proyek yang sedang berjalan atau sudah selesai tidak dapat dihapus.');
+        }
+
         $proyek->delete();
 
         return redirect()->route('proyek.my')->with('success', 'Proyek berhasil dihapus.');

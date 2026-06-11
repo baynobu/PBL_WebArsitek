@@ -171,6 +171,28 @@
                         @else
                             <div class="mt-5 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700">Rating arsitek sudah dikirim.</div>
                         @endif
+                    @if($isClientOwner && $proyek->status === 'open')
+                        <form method="post" action="{{ route('proyek.destroy', $proyek) }}" class="mt-3" onsubmit="return confirm('Apakah Anda yakin ingin menghapus proyek ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="w-full rounded-2xl border border-rose-200 bg-rose-50 py-3.5 text-sm font-semibold text-rose-600 transition hover:bg-rose-100">Hapus Proyek</button>
+                        </form>
+                    @endif
+
+                    @if(auth()->check() && auth()->user()->role === 'arsitek')
+                        @php
+                            $alreadySubmitted = $proyek->proposal()->where('arsitek_id', auth()->id())->first();
+                        @endphp
+                        @if($proyek->status === 'open')
+                            @if($alreadySubmitted)
+                                <div class="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-800 text-center">
+                                    Anda telah mengajukan proposal untuk proyek ini.
+                                    <a href="{{ route('proposal.show', $alreadySubmitted) }}" class="block mt-2 font-bold text-emerald-950 underline">Lihat Detail Proposal Anda</a>
+                                </div>
+                            @else
+                                <a href="{{ route('proposal.create', $proyek) }}" class="mt-5 inline-flex w-full items-center justify-center rounded-2xl bg-amber-700 py-3.5 text-sm font-semibold text-white shadow-md shadow-amber-700/20 transition hover:bg-amber-800">Ajukan Proposal</a>
+                            @endif
+                        @endif
                     @endif
                 </div>
 
