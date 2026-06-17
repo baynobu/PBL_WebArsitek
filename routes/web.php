@@ -32,7 +32,8 @@ Route::get('/', function () {
         ->groupBy('section')
         ->map(fn ($items) => $items->keyBy('key'));
 
-    $projects = Proyek::where('is_hidden', false)
+    $projects = Proyek::published()
+        ->where('is_hidden', false)
         ->where('is_featured', true)
         ->latest()
         ->take(10)
@@ -54,8 +55,8 @@ Route::get('/dashboard', function () {
 
     // 2. JIKA YANG LOGIN ADALAH ARSITEK
     if ($user->role === 'arsitek') {
-        $proyeks = \App\Models\Proyek::where('is_hidden', false)
-            ->where('status', 'open')
+        $proyeks = \App\Models\Proyek::published()
+            ->where('is_hidden', false)
             ->latest()
             ->paginate(10);
 
@@ -101,6 +102,8 @@ Route::middleware(['auth', 'account.verified', 'role:client'])->group(function (
     Route::get('/client/proyek', [ProyekController::class, 'myProjects'])->name('proyek.my');
     Route::get('/client/proyek/create', [ProyekController::class, 'create'])->name('proyek.create');
     Route::post('/client/proyek', [ProyekController::class, 'store'])->name('proyek.store');
+    Route::get('/client/proyek/{proyek}/edit', [ProyekController::class, 'edit'])->name('proyek.edit');
+    Route::put('/client/proyek/{proyek}', [ProyekController::class, 'update'])->name('proyek.update');
     Route::delete('/client/proyek/{proyek}', [ProyekController::class, 'destroy'])->name('proyek.destroy');
     Route::get('/proyek/{proyek}/rating/create', [RatingController::class, 'create'])->name('rating.create');
     Route::post('/proyek/{proyek}/rating', [RatingController::class, 'store'])->name('rating.store');
@@ -135,6 +138,12 @@ Route::middleware(['auth', 'account.verified', 'role:client'])->group(function (
 
     Route::post('/client/proyek', [ProyekController::class, 'store'])
         ->name('proyek.store');
+
+    Route::get('/client/proyek/{proyek}/edit', [ProyekController::class, 'edit'])
+        ->name('proyek.edit');
+
+    Route::put('/client/proyek/{proyek}', [ProyekController::class, 'update'])
+        ->name('proyek.update');
 
     Route::delete('/client/proyek/{proyek}', [ProyekController::class, 'destroy'])
         ->name('proyek.destroy');

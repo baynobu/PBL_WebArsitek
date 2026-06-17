@@ -61,14 +61,26 @@ Options Considered:
 Chosen Decision: **Option B**
 Reasoning: Decreases UI clutter and duplicates, offering a clean entry point where architects immediately see available jobs.
 Impact: "Daftar Tender" navbar link removed. `/dashboard` for architects serves the listing dynamically.
-Future Reference: Do not recreate a separate route for tender lists.
+Future Reference: Do not recreate a recreation route for tender lists.
+
+## Decision ID: DEC-003
+Date: 2026-06-16
+Context: Implementing client draft projects and scheduled posting systems.
+Problem: Need a way to save drafts and schedule publications without causing duplicate database records or overly complex schemas.
+Options Considered:
+- **Option A**: Create a new `draft_proyek` table for drafts and scheduling metadata.
+- **Option B**: Add a `scheduled_at` datetime column directly to the existing `proyek` table and introduce `'draft'` and `'scheduled'` statuses.
+Chosen Decision: **Option B**
+Reasoning: Eliminates database joins, keeps schema clean, makes transitions to `'open'` straightforward through a single table update, and reuses all existing project relations.
+Impact: Added `scheduled_at` column to `proyek`. Configured an Artisan command (`app:publish-scheduled-projects`) run by Laravel Scheduler every minute to automatically publish scheduled tenders.
+Future Reference: Exclude unpublished projects using the `Proyek::published()` scope.
 
 ---
 
 ## 4. Logic Memory
 
 - **Rule: Project Deletion Constraints**
-  - *Logic*: A client can only delete/hide a project if its status is exactly `open`.
+  - *Logic*: A client can only delete/hide a project if its status is exactly `open`, `draft`, or `scheduled`.
   - *Reason*: Preventing clients from deleting projects that have already been accepted or are `progress`/`done` preserves database integrity and prevents orphaned task/proposal states.
 
 - **Rule: Proposal/Bid Price Privacy**
@@ -78,6 +90,10 @@ Future Reference: Do not recreate a separate route for tender lists.
 - **Rule: Route Match for Profile Uploads**
   - *Logic*: Use `Route::match(['post', 'patch'])` instead of strict patch routes when forms submit multipart data with standard Laravel spoofing to avoid route method exceptions.
   - *Reason*: Solves standard Laravel form upload request redirection bugs.
+
+- **Rule: Published Projects Scope**
+  - *Logic*: Architect search, landing pages, and dashboard tenders must strictly filter projects using `Proyek::published()` (meaning status is `'open'` and `scheduled_at` is null or in the past).
+  - *Reason*: Prevents drafts and scheduled projects from leaking to candidate architects.
 
 ---
 

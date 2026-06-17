@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-slate-50 py-10" x-data="{ hasProjects: {{ $proyeks->count() ? 'true' : 'false' }} }">
+<div class="min-h-screen bg-slate-50 py-10" x-data="{ hasProjects: {{ $proyeks->count() ? 'true' : 'false' }}, activeTab: 'all' }">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
 
         {{-- Header --}}
@@ -19,9 +19,25 @@
                 </div>
 
                 <div class="flex justify-start lg:justify-end">
-                    <a href="{{ route('proyek.create') }}" class="inline-flex items-center rounded-2xl bg-stone-800 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-950/20 transition duration-200 hover:bg-stone-900">+ Buat Proyek Baru</a>
+                    <a href="{{ route('proyek.create') }}" class="inline-flex items-center rounded-2xl bg-amber-750 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-amber-950/20 transition duration-200 hover:bg-amber-800">+ Buat Proyek Baru</a>
                 </div>
             </div>
+        </div>
+
+        {{-- Tabs --}}
+        <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-4">
+            <button @click="activeTab = 'all'" :class="activeTab === 'all' ? 'bg-amber-600 text-white shadow-sm shadow-amber-900/10' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'" class="px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl transition">
+                Semua Proyek
+            </button>
+            <button @click="activeTab = 'draft'" :class="activeTab === 'draft' ? 'bg-amber-600 text-white shadow-sm shadow-amber-900/10' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'" class="px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl transition">
+                Draft & Terjadwal
+            </button>
+            <button @click="activeTab = 'active'" :class="activeTab === 'active' ? 'bg-amber-600 text-white shadow-sm shadow-amber-900/10' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'" class="px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl transition">
+                Proyek Aktif
+            </button>
+            <button @click="activeTab = 'done'" :class="activeTab === 'done' ? 'bg-amber-600 text-white shadow-sm shadow-amber-900/10' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'" class="px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl transition">
+                Selesai
+            </button>
         </div>
 
         {{-- Project list --}}
@@ -30,7 +46,7 @@
                 <template x-if="hasProjects">
                     <div class="space-y-5">
                         @foreach($proyeks as $proyek)
-                            <article class="rounded-[28px] border border-slate-100 bg-white shadow-sm transition duration-200 hover:shadow-md overflow-hidden">
+                            <article x-show="activeTab === 'all' || (activeTab === 'draft' && ['draft', 'scheduled'].includes('{{ $proyek->status }}')) || (activeTab === 'active' && ['open', 'progress'].includes('{{ $proyek->status }}')) || (activeTab === 'done' && '{{ $proyek->status }}' === 'done')" class="rounded-[28px] border border-slate-100 bg-white shadow-sm transition duration-200 hover:shadow-md overflow-hidden">
 
                                 {{-- Subtle left accent bar --}}
                                 <div class="flex">
@@ -45,21 +61,24 @@
                                                     <span class="uppercase tracking-[0.26em] text-[11px] font-semibold text-slate-400">{{ $proyek->kategori ?? 'Proyek Arsitektur' }}</span>
 
                                                     {{-- Badge dengan warna berdasarkan status --}}
-                                                    @php
-                                                        $statusLabel = strtolower($proyek->status) === 'open'
-                                                            ? 'AKTIF'
-                                                            : (strtolower($proyek->status) === 'progress'
-                                                                ? 'Sedang Berjalan'
-                                                                : strtoupper($proyek->status));
-                                                        $statusClass = match(strtolower($proyek->status)) {
-                                                            'open'      => 'bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200',
-                                                            'progress'  => 'bg-sky-100 text-sky-700 ring-1 ring-sky-200',
-                                                            'closed'    => 'bg-slate-100 text-slate-500 ring-1 ring-slate-200',
-                                                            'pending'   => 'bg-amber-100 text-amber-700 ring-1 ring-amber-200',
-                                                            'cancelled' => 'bg-red-100 text-red-600 ring-1 ring-red-200',
-                                                            default     => 'bg-blue-100 text-blue-700 ring-1 ring-blue-200',
-                                                        };
-                                                    @endphp
+                                                     @php
+                                                         $statusLabel = match(strtolower($proyek->status)) {
+                                                             'open'      => 'AKTIF',
+                                                             'progress'  => 'Sedang Berjalan',
+                                                             'draft'     => 'DRAFT',
+                                                             'scheduled' => 'TERJADWAL',
+                                                             'done'      => 'SELESAI',
+                                                             default     => strtoupper($proyek->status),
+                                                         };
+                                                         $statusClass = match(strtolower($proyek->status)) {
+                                                             'open'      => 'bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200',
+                                                             'progress'  => 'bg-sky-100 text-sky-700 ring-1 ring-sky-200',
+                                                             'draft'     => 'bg-stone-100 text-slate-600 ring-1 ring-slate-200',
+                                                             'scheduled' => 'bg-amber-100 text-amber-700 ring-1 ring-amber-200',
+                                                             'done'      => 'bg-teal-100 text-teal-700 ring-1 ring-teal-200',
+                                                             default     => 'bg-blue-100 text-blue-700 ring-1 ring-blue-200',
+                                                         };
+                                                     @endphp
                                                     <span class="inline-flex rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.15em] {{ $statusClass }}">
                                                         {{ $statusLabel }}
                                                     </span>
@@ -127,7 +146,12 @@
 
                                             {{-- RIGHT: Actions --}}
                                             <div class="flex flex-col gap-3 justify-start lg:pt-1">
-                                                <a href="{{ route('proyek.show', $proyek) }}" class="inline-flex w-full items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50">Lihat Proposal</a>
+                                                @if(in_array(strtolower($proyek->status), ['draft', 'scheduled']))
+                                                    <a href="{{ route('proyek.edit', $proyek) }}" class="inline-flex w-full items-center justify-center rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-700 transition hover:bg-amber-100">Ubah Draft</a>
+                                                @elseif(strtolower($proyek->status) === 'open')
+                                                    <a href="{{ route('proyek.edit', $proyek) }}" class="inline-flex w-full items-center justify-center rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-750 transition hover:bg-amber-100">Ubah Proyek</a>
+                                                @endif
+                                                <a href="{{ route('proyek.show', $proyek) }}" class="inline-flex w-full items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50">Detail Proyek</a>
                                                 <a href="{{ route('proyek.show', $proyek) }}" class="inline-flex w-full items-center justify-center rounded-xl bg-amber-700 px-5 py-3 text-sm font-medium text-white transition hover:bg-amber-800">Kelola Proyek</a>
                                             </div>
 

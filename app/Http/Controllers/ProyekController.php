@@ -15,7 +15,7 @@ class ProyekController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Proyek::query()->where('is_hidden', false);
+        $query = Proyek::published()->where('is_hidden', false);
 
         $search = trim((string) $request->input('q', ''));
 
@@ -93,10 +93,25 @@ class ProyekController extends Controller
             'deadline' => 'required|date|after_or_equal:today',
             'lokasi' => 'nullable|string|max:100',
             'open_duration_days' => 'required|integer|min:3|max:90',
+            'action' => 'required|in:draft,schedule,publish',
+            'scheduled_at' => 'required_if:action,schedule|nullable|date|after:now',
         ]);
 
-        $openAt = now();
-        $openUntil = Carbon::parse($openAt)->addDays((int) $data['open_duration_days']);
+        $action = $data['action'];
+        $status = 'open';
+        $scheduledAt = null;
+        $openAt = null;
+        $openUntil = null;
+
+        if ($action === 'draft') {
+            $status = 'draft';
+        } elseif ($action === 'schedule') {
+            $status = 'scheduled';
+            $scheduledAt = Carbon::parse($data['scheduled_at']);
+        } else {
+            $openAt = now();
+            $openUntil = Carbon::parse($openAt)->addDays((int) $data['open_duration_days']);
+        }
 
         $proyek = Proyek::create([
             'client_id' => $user->id,
@@ -105,18 +120,103 @@ class ProyekController extends Controller
             'budget' => $data['budget'],
             'deadline' => $data['deadline'],
             'lokasi' => $data['lokasi'] ?? null,
-            'status' => 'open',
+            'status' => $status,
+            'scheduled_at' => $scheduledAt,
             'open_at' => $openAt,
             'open_until' => $openUntil,
             'open_duration_days' => $data['open_duration_days'],
             'progress_percent' => 0,
-            'progress_note' => 'Menunggu arsitek mengajukan proposal.',
-            'progress_updated_at' => $openAt,
+            'progress_note' => $status === 'open' ? 'Menunggu arsitek mengajukan proposal.' : 'Proyek belum dipublikasikan.',
+            'progress_updated_at' => now(),
             'is_featured' => false,
             'is_hidden' => false,
         ]);
 
-        return redirect()->route('proyek.show', $proyek)->with('success', 'Proyek berhasil diposting.');
+        $msg = 'Proyek berhasil diposting.';
+        if ($status === 'draft') {
+            $msg = 'Proyek berhasil disimpan sebagai draft.';
+        } elseif ($status === 'scheduled') {
+            $msg = 'Proyek berhasil dijadwalkan untuk diposting.';
+        }
+
+        return redirect()->route('proyek.show', $proyek)->with('success', $msg);
+    }
+
+    /**
+     * Client: edit proyek.
+     */
+    public function edit(Proyek $proyek)
+    {
+        $this->ensureClientOwnsProject($proyek);
+
+        if (!in_array($proyek->status, ['draft', 'scheduled', 'open'])) {
+            return redirect()->route('proyek.my')->with('error', 'Proyek yang sedang berjalan atau sudah selesai tidak dapat diubah.');
+        }
+
+        return view('proyek.edit', compact('proyek'));
+    }
+
+    /**
+     * Client: update proyek.
+     */
+    public function update(Request $request, Proyek $proyek)
+    {
+        $this->ensureClientOwnsProject($proyek);
+
+        if (!in_array($proyek->status, ['draft', 'scheduled', 'open'])) {
+            return redirect()->route('proyek.my')->with('error', 'Proyek yang sedang berjalan atau sudah selesai tidak dapat diubah.');
+        }
+
+        $data = $request->validate([
+            'judul' => 'required|string|max:100',
+            'deskripsi' => 'required|string',
+            'budget' => 'required|numeric|min:0',
+            'deadline' => 'required|date|after_or_equal:today',
+            'lokasi' => 'nullable|string|max:100',
+            'open_duration_days' => 'required|integer|min:3|max:90',
+            'action' => 'required|in:draft,schedule,publish',
+            'scheduled_at' => 'required_if:action,schedule|nullable|date|after:now',
+        ]);
+
+        $action = $data['action'];
+        $status = 'open';
+        $scheduledAt = null;
+        $openAt = null;
+        $openUntil = null;
+
+        if ($action === 'draft') {
+            $status = 'draft';
+        } elseif ($action === 'schedule') {
+            $status = 'scheduled';
+            $scheduledAt = Carbon::parse($data['scheduled_at']);
+        } else {
+            $openAt = now();
+            $openUntil = Carbon::parse($openAt)->addDays((int) $data['open_duration_days']);
+        }
+
+        $proyek->update([
+            'judul' => $data['judul'],
+            'deskripsi' => $data['deskripsi'],
+            'budget' => $data['budget'],
+            'deadline' => $data['deadline'],
+            'lokasi' => $data['lokasi'] ?? null,
+            'status' => $status,
+            'scheduled_at' => $scheduledAt,
+            'open_at' => $openAt,
+            'open_until' => $openUntil,
+            'open_duration_days' => $data['open_duration_days'],
+            'progress_note' => $status === 'open' ? 'Menunggu arsitek mengajukan proposal.' : 'Proyek belum dipublikasikan.',
+            'progress_updated_at' => now(),
+        ]);
+
+        $msg = 'Proyek berhasil diperbarui.';
+        if ($status === 'draft') {
+            $msg = 'Draft proyek berhasil diperbarui.';
+        } elseif ($status === 'scheduled') {
+            $msg = 'Proyek berhasil dijadwalkan untuk diposting.';
+        }
+
+        return redirect()->route('proyek.show', $proyek)->with('success', $msg);
     }
 
     /**
@@ -164,7 +264,7 @@ class ProyekController extends Controller
             abort(403);
         }
 
-        if ($proyek->status !== 'open') {
+        if (!in_array($proyek->status, ['open', 'draft', 'scheduled'])) {
             return redirect()->route('proyek.my')->with('error', 'Proyek yang sedang berjalan atau sudah selesai tidak dapat dihapus.');
         }
 
@@ -172,7 +272,6 @@ class ProyekController extends Controller
 
         return redirect()->route('proyek.my')->with('success', 'Proyek berhasil dihapus.');
     }
-
     /**
      * Add a checklist task to the project.
      */

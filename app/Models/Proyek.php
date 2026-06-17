@@ -19,6 +19,7 @@ class Proyek extends Model
         'deadline',
         'lokasi',
         'status',
+        'scheduled_at',
         'arsitek_terpilih_id',
         'open_at',
         'open_until',
@@ -32,6 +33,31 @@ class Proyek extends Model
         'moderated_at',
         'moderation_note',
     ];
+
+    protected $casts = [
+        'scheduled_at' => 'datetime',
+        'deadline' => 'date',
+        'open_at' => 'datetime',
+        'open_until' => 'datetime',
+        'progress_updated_at' => 'datetime',
+        'moderated_at' => 'datetime',
+        'is_featured' => 'boolean',
+        'is_hidden' => 'boolean',
+    ];
+
+    public function scopePublished($query)
+    {
+        return $query->where('status', 'open')
+            ->where(function ($q) {
+                $q->whereNull('scheduled_at')
+                  ->orWhere('scheduled_at', '<=', now());
+            });
+    }
+
+    public function scopeDraftsOrScheduled($query)
+    {
+        return $query->whereIn('status', ['draft', 'scheduled']);
+    }
 
     public function client()
     {
